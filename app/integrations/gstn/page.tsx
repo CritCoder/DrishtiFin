@@ -52,6 +52,23 @@ export default function GSTNVerificationPage() {
   const [isVerifying, setIsVerifying] = useState(false)
   const [verificationResult, setVerificationResult] = useState<VerificationResult | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [recentVerifications, setRecentVerifications] = useState([
+    {
+      id: 1,
+      gstin: "27AAPFU0939F1ZV",
+      companyName: "TechSkills Training Pvt Ltd",
+      status: "Verified",
+      date: "2024-01-20",
+    },
+    {
+      id: 2,
+      gstin: "29AABCU9603R1ZX",
+      companyName: "Digital Learning Solutions",
+      status: "Invalid",
+      date: "2024-01-19",
+    },
+    { id: 3, gstin: "07AAGFF2194N1Z1", companyName: "Skill Development Corp", status: "Verified", date: "2024-01-18" },
+  ])
 
   const handleVerification = async () => {
     if (!gstin || gstin.length !== 15) {
@@ -66,8 +83,9 @@ export default function GSTNVerificationPage() {
     await new Promise((resolve) => setTimeout(resolve, 2000))
 
     // Mock response based on provided example
+    let result: VerificationResult
     if (gstin === "27AARFR5953J1ZF") {
-      setVerificationResult({
+      result = {
         data: {
           gstin: "27AARFR5953J1ZF",
           lgnm: "RISEMETRIC TECHNOLOGY LLP",
@@ -110,10 +128,10 @@ export default function GSTNVerificationPage() {
           einvoiceStatus: "No",
         },
         status_cd: "1",
-      })
+      }
     } else {
       // Mock other GSTIN responses
-      setVerificationResult({
+      result = {
         data: {
           gstin: gstin,
           lgnm: "Sample Company Pvt Ltd",
@@ -142,8 +160,24 @@ export default function GSTNVerificationPage() {
           einvoiceStatus: "Yes",
         },
         status_cd: "1",
-      })
+      }
     }
+    
+    setVerificationResult(result)
+    
+    // Add to recent verifications (avoid duplicates)
+    const newVerification = {
+      id: Date.now(),
+      gstin: result.data.gstin,
+      companyName: result.data.lgnm,
+      status: result.data.sts === "Active" ? "Verified" : result.data.sts,
+      date: new Date().toISOString().split('T')[0]
+    }
+    
+    setRecentVerifications(prev => {
+      const filtered = prev.filter(v => v.gstin !== newVerification.gstin)
+      return [newVerification, ...filtered].slice(0, 10) // Keep only last 10
+    })
 
     setIsVerifying(false)
   }
@@ -167,23 +201,6 @@ export default function GSTNVerificationPage() {
     }
   }
 
-  const recentVerifications = [
-    {
-      id: 1,
-      gstin: "27AAPFU0939F1ZV",
-      companyName: "TechSkills Training Pvt Ltd",
-      status: "Verified",
-      date: "2024-01-20",
-    },
-    {
-      id: 2,
-      gstin: "29AABCU9603R1ZX",
-      companyName: "Digital Learning Solutions",
-      status: "Invalid",
-      date: "2024-01-19",
-    },
-    { id: 3, gstin: "07AAGFF2194N1Z1", companyName: "Skill Development Corp", status: "Verified", date: "2024-01-18" },
-  ]
 
   return (
     <div className="p-6 space-y-6">

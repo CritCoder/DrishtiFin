@@ -29,7 +29,19 @@ export function ConditionalLayout({ children }: ConditionalLayoutProps) {
     pathname.startsWith("/rti") ||
     pathname.startsWith("/sitemap")
 
-  const isDashboardRoute = pathname.startsWith("/app")
+  const isDashboardRoute = 
+    pathname.startsWith("/app") || 
+    pathname.startsWith("/placements") ||
+    pathname.startsWith("/tps") ||
+    pathname.startsWith("/batches") ||
+    pathname.startsWith("/payments") ||
+    pathname.startsWith("/approvals") ||
+    pathname.startsWith("/reports") ||
+    pathname.startsWith("/audit-logs") ||
+    pathname.startsWith("/settings") ||
+    pathname.startsWith("/files") ||
+    pathname.startsWith("/integrations") ||
+    pathname.startsWith("/student")
 
   if (isAuthRoute || isPublicRoute) {
     return <>{children}</>

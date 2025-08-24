@@ -17,7 +17,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   const { user } = useAuth()
 
   const getPageInfo = (path: string) => {
-    if (path === "/")
+    if (path === "/" || path === "/app")
       return {
         activeItem: "analytics_overview",
         title: "Analytics Overview",
@@ -174,6 +174,35 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         activeItem: "settings_general",
         title: "Settings",
         subtitle: "Configure system preferences",
+        showBackButton: false,
+        backUrl: "",
+        backLabel: "",
+      }
+
+    // Student routes
+    if (path === "/student/dashboard")
+      return {
+        activeItem: "student_dashboard",
+        title: "Student Dashboard",
+        subtitle: "Your learning journey and progress",
+        showBackButton: false,
+        backUrl: "",
+        backLabel: "",
+      }
+    if (path === "/student/batch")
+      return {
+        activeItem: "my_batch",
+        title: "My Batch",
+        subtitle: "Your training batch information",
+        showBackButton: false,
+        backUrl: "",
+        backLabel: "",
+      }
+    if (path === "/student/placement")
+      return {
+        activeItem: "my_placement",
+        title: "My Placement",
+        subtitle: "Job placement status and opportunities",
         showBackButton: false,
         backUrl: "",
         backLabel: "",

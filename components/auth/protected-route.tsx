@@ -29,9 +29,23 @@ export function ProtectedRoute({
   useEffect(() => {
     console.log("🔒 ProtectedRoute check:", { isLoading, isAuthenticated, user: !!user, pathname })
     
-    // TEMPORARY: Bypass authentication for testing
-    if (pathname === '/app') {
-      console.log("🚧 BYPASSING AUTH for /app route");
+    // TEMPORARY: Bypass authentication for all dashboard routes
+    const isDashboardRoute = 
+      pathname.startsWith("/app") || 
+      pathname.startsWith("/placements") ||
+      pathname.startsWith("/tps") ||
+      pathname.startsWith("/batches") ||
+      pathname.startsWith("/payments") ||
+      pathname.startsWith("/approvals") ||
+      pathname.startsWith("/reports") ||
+      pathname.startsWith("/audit-logs") ||
+      pathname.startsWith("/settings") ||
+      pathname.startsWith("/files") ||
+      pathname.startsWith("/integrations") ||
+      pathname.startsWith("/student")
+      
+    if (isDashboardRoute) {
+      console.log("🚧 BYPASSING AUTH for dashboard route:", pathname);
       return;
     }
     
@@ -42,21 +56,25 @@ export function ProtectedRoute({
     }
   }, [isLoading, isAuthenticated, user, pathname])
 
-  // TEMPORARY: Skip auth redirect but still check for user
-  if (pathname === '/app') {
-    console.log("🔒 Checking auth for /app:", { isLoading, isAuthenticated, user: !!user });
-    // If we have a user, show the dashboard
-    if (user) {
-      console.log("✅ User found, showing dashboard");
-      return <>{children}</>;
-    }
-    // If no user but not loading, still show dashboard for now (bypass auth)
-    if (!isLoading) {
-      console.log("⚠️ No user but not loading, showing dashboard anyway");
-      return <>{children}</>;
-    }
-    // If still loading, show loading spinner
-    console.log("⏳ Still loading, showing spinner");
+  // TEMPORARY: Completely bypass auth for all dashboard routes
+  const isDashboardRoute = 
+    pathname.startsWith("/app") || 
+    pathname.startsWith("/placements") ||
+    pathname.startsWith("/tps") ||
+    pathname.startsWith("/batches") ||
+    pathname.startsWith("/payments") ||
+    pathname.startsWith("/approvals") ||
+    pathname.startsWith("/reports") ||
+    pathname.startsWith("/audit-logs") ||
+    pathname.startsWith("/settings") ||
+    pathname.startsWith("/files") ||
+    pathname.startsWith("/integrations") ||
+    pathname.startsWith("/student")
+    
+  if (isDashboardRoute) {
+    console.log("🔒 Checking auth for dashboard route:", pathname, { isLoading, isAuthenticated, user: !!user });
+    console.log("🚧 BYPASSING all auth for dashboard routes - showing content directly");
+    return <>{children}</>;
   }
 
   // Show loading state

@@ -29,64 +29,85 @@ const navigationItems = [
     id: "analytics_overview",
     label: "Analytics",
     icon: BarChart3,
-    href: "/",
-    roles: ["admin", "training_partner", "student", "auditor", "finance"],
+    href: "/app",
+    roles: ["osda_admin", "training_partner", "system_integrator", "employer"],
+  },
+  {
+    id: "student_dashboard",
+    label: "Dashboard",
+    icon: BarChart3,
+    href: "/student/dashboard",
+    roles: ["student"],
   },
   {
     id: "tp_list",
     label: "Training Partners",
     icon: Users,
     href: "/tps",
-    roles: ["admin", "auditor"],
+    roles: ["osda_admin", "system_integrator"],
   },
   {
     id: "batches_list",
     label: "Batches",
     icon: GraduationCap,
     href: "/batches",
-    roles: ["admin", "training_partner", "auditor"],
+    roles: ["osda_admin", "training_partner", "system_integrator"],
+  },
+  {
+    id: "my_batch",
+    label: "My Batch",
+    icon: GraduationCap,
+    href: "/student/batch",
+    roles: ["student"],
   },
   {
     id: "placements_list",
     label: "Placements",
     icon: Briefcase,
     href: "/placements",
-    roles: ["admin", "training_partner", "auditor", "finance"],
+    roles: ["osda_admin", "training_partner", "system_integrator"],
+  },
+  {
+    id: "my_placement",
+    label: "My Placement",
+    icon: Briefcase,
+    href: "/student/placement",
+    roles: ["student"],
   },
   {
     id: "payments_milestones",
     label: "Payments",
     icon: CreditCard,
     href: "/payments",
-    roles: ["admin", "finance"],
+    roles: ["osda_admin"],
   },
   {
     id: "approvals_list",
     label: "Approvals",
     icon: CheckCircle,
     href: "/approvals",
-    roles: ["admin", "auditor"],
+    roles: ["osda_admin", "system_integrator"],
   },
   {
     id: "reports_export",
     label: "Reports",
     icon: FileText,
     href: "/reports",
-    roles: ["admin", "auditor", "finance"],
+    roles: ["osda_admin", "system_integrator"],
   },
   {
     id: "audit_logs",
     label: "Audit Logs",
     icon: Shield,
     href: "/audit-logs",
-    roles: ["admin", "auditor"],
+    roles: ["osda_admin", "system_integrator"],
   },
   {
     id: "settings_general",
     label: "Settings",
     icon: Settings,
     href: "/settings",
-    roles: ["admin"],
+    roles: ["osda_admin"],
   },
 ]
 
@@ -96,28 +117,28 @@ const shortcuts = [
     label: "New Training Partner",
     icon: UserCheck,
     href: "/tps/new",
-    roles: ["admin"],
+    roles: ["osda_admin"],
   },
   {
     id: "batches_create",
     label: "New Batch",
     icon: GraduationCap,
     href: "/batches/new",
-    roles: ["admin", "training_partner"],
+    roles: ["osda_admin", "training_partner"],
   },
   {
     id: "files_upload",
     label: "Upload Files",
     icon: Upload,
     href: "/files/upload",
-    roles: ["admin", "training_partner"],
+    roles: ["osda_admin", "training_partner"],
   },
   {
     id: "integrations_gstn_verify",
     label: "GSTN Verification",
     icon: Search,
     href: "/integrations/gstn",
-    roles: ["admin", "auditor"],
+    roles: ["osda_admin", "system_integrator"],
   },
 ]
 
@@ -129,9 +150,18 @@ export function DashboardSidebar({ activeItem }: DashboardSidebarProps) {
   const [isCollapsed, setIsCollapsed] = useState(false)
   const { user, logout } = useAuth()
 
-  const visibleNavigationItems = navigationItems.filter((item) => user && item.roles.includes(user.role))
+  // TEMPORARY: For testing without proper auth, simulate different user roles based on URL or default
+  // In production, this should use the actual authenticated user role
+  const getCurrentUserRole = () => {
+    if (user?.role) return user.role
+    // For testing: simulate different roles based on current path or use student as default
+    return "student" // Default to student role for testing
+  }
+  
+  const currentUser = user || { role: getCurrentUserRole() }
+  const visibleNavigationItems = navigationItems.filter((item) => currentUser && item.roles.includes(currentUser.role))
 
-  const visibleShortcuts = shortcuts.filter((item) => user && item.roles.includes(user.role))
+  const visibleShortcuts = shortcuts.filter((item) => currentUser && item.roles.includes(currentUser.role))
 
   return (
     <div
