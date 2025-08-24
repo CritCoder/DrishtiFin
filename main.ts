@@ -50,6 +50,47 @@ async function handler(req: Request): Promise<Response> {
       )
     }
 
+    // Seed database endpoint
+    if (path === "/seed") {
+      try {
+        const { initializeDemoData } = await import("./utils/seed-data.ts")
+        const { authRoutes } = await import("./routes/auth.ts")
+        
+        // Initialize demo users via auth route (which calls initializeDemoUsers)
+        await authRoutes(new Request(`${url.origin}/api/auth/login`, { method: 'POST', body: JSON.stringify({}) }))
+        // Initialize demo data
+        await initializeDemoData()
+        
+        return new Response(
+          JSON.stringify({
+            success: true,
+            message: "Demo data seeded successfully",
+            timestamp: new Date().toISOString(),
+          }),
+          {
+            headers: {
+              "content-type": "application/json",
+              ...corsHeaders,
+            },
+          },
+        )
+      } catch (error) {
+        return new Response(
+          JSON.stringify({
+            error: "Failed to seed database",
+            message: error.message,
+          }),
+          {
+            status: 500,
+            headers: {
+              "content-type": "application/json",
+              ...corsHeaders,
+            },
+          },
+        )
+      }
+    }
+
     // Route to appropriate handlers
     if (path.startsWith("/api/auth")) {
       return await authRoutes(req)
@@ -110,5 +151,6 @@ async function handler(req: Request): Promise<Response> {
 }
 
 // Start the server
-serve(handler, { port: 8000 })
-console.log("🚀 DRISHTI API Server running on http://localhost:8000")
+const port = 8001
+serve(handler, { port })
+console.log(`🚀 DRISHTI API Server running on http://localhost:${port}`)
