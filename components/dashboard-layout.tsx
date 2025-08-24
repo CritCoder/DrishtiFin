@@ -68,7 +68,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       }
     if (path === "/batches/new")
       return {
-        activeItem: "batches_list",
+        activeItem: "new_batch",
         title: "New Batch",
         subtitle: "Create a new training batch",
         showBackButton: true,

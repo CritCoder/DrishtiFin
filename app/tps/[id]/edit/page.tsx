@@ -83,17 +83,30 @@ export default function EditTrainingPartnerPage({ params }: Props) {
   }
 
   const addCenter = () => {
-    const newCenter = {
-      id: Date.now(),
-      name: "",
-      location: "",
-      capacity: 0,
-      active: true
+    try {
+      const newCenter = {
+        id: Date.now(),
+        name: "",
+        location: "",
+        capacity: 0,
+        active: true
+      }
+      setFormData(prev => ({
+        ...prev,
+        centers: [...prev.centers, newCenter]
+      }))
+      toast({
+        title: "Center Added",
+        description: "New center has been added. Fill in the details.",
+      })
+    } catch (error) {
+      console.error('Error adding center:', error)
+      toast({
+        title: "Error",
+        description: "Failed to add center. Please try again.",
+        variant: "destructive"
+      })
     }
-    setFormData(prev => ({
-      ...prev,
-      centers: [...prev.centers, newCenter]
-    }))
   }
 
   const removeCenter = (index: number) => {
@@ -105,16 +118,29 @@ export default function EditTrainingPartnerPage({ params }: Props) {
   }
 
   const addProgram = () => {
-    const newProgram = {
-      id: Date.now(),
-      name: "",
-      duration: "",
-      fee: 0
+    try {
+      const newProgram = {
+        id: Date.now(),
+        name: "",
+        duration: "",
+        fee: 0
+      }
+      setFormData(prev => ({
+        ...prev,
+        programs: [...prev.programs, newProgram]
+      }))
+      toast({
+        title: "Program Added",
+        description: "New program has been added. Fill in the details.",
+      })
+    } catch (error) {
+      console.error('Error adding program:', error)
+      toast({
+        title: "Error",
+        description: "Failed to add program. Please try again.",
+        variant: "destructive"
+      })
     }
-    setFormData(prev => ({
-      ...prev,
-      programs: [...prev.programs, newProgram]
-    }))
   }
 
   const removeProgram = (index: number) => {
@@ -173,17 +199,9 @@ export default function EditTrainingPartnerPage({ params }: Props) {
 
       {/* Header */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <Link href={`/tps/${params.id}`}>
-            <Button variant="outline" size="sm">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Details
-            </Button>
-          </Link>
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">Edit Training Partner</h1>
-            <p className="text-gray-600">{formData.registrationNumber}</p>
-          </div>
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Edit Training Partner</h1>
+          <p className="text-gray-600">{formData.registrationNumber}</p>
         </div>
         <div className="flex items-center gap-3">
           <Badge className={getStatusColor(formData.status)}>

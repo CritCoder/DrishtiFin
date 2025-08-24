@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useAuth } from "@/lib/auth"
 import { signIn } from "next-auth/react"
 import { useNotificationModal } from "@/components/notification-modal"
@@ -79,6 +79,24 @@ const userRoles = [
   },
 ]
 
+const heroSlides = [
+  {
+    title: "One Platform to Streamline",
+    subtitle: "All Training Analytics",
+    description: "Empowering government training programs with comprehensive partner management and student tracking capabilities through modern technology."
+  },
+  {
+    title: "Comprehensive Training",
+    subtitle: "Partner Management",
+    description: "Connect, verify and monitor training organizations across India with real-time compliance tracking and performance insights."
+  },
+  {
+    title: "Real-time Analytics",
+    subtitle: "& Reporting Dashboard", 
+    description: "Advanced analytics and intelligent reports for tracking performance, placements, and outcomes with predictive insights."
+  }
+]
+
 export default function LoginPage() {
   const { login, isLoading } = useAuth()
   const [selectedRole, setSelectedRole] = useState<string>("")
@@ -88,8 +106,18 @@ export default function LoginPage() {
   const [error, setError] = useState("")
   const { showNotification, NotificationComponent } = useNotificationModal()
   const [showDemoDrawer, setShowDemoDrawer] = useState(false)
+  const [currentSlide, setCurrentSlide] = useState(0)
 
   const selectedRoleData = userRoles.find((role) => role.id === selectedRole)
+  const currentSlideData = heroSlides[currentSlide]
+
+  // Auto-advance carousel every 4 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % heroSlides.length)
+    }, 4000)
+    return () => clearInterval(interval)
+  }, [])
 
   const fillDemoCredentials = (roleId: string, subtypeId?: string) => {
     const roleCreds = demoCredentials[roleId as keyof typeof demoCredentials]
@@ -203,20 +231,30 @@ export default function LoginPage() {
               <span className="text-3xl font-serif font-bold text-white">D</span>
             </div>
 
-            <h1 className="text-4xl font-serif font-bold mb-4 leading-tight max-w-2xl">
-              One Platform to <span className="text-purple-400">Streamline</span>
-            </h1>
-            <h2 className="text-3xl font-serif font-bold mb-6 text-gray-200">All Training Analytics</h2>
+            <div className="transition-all duration-500 ease-in-out">
+              <h1 className="text-4xl font-serif font-bold mb-4 leading-tight max-w-2xl">
+                {currentSlideData.title.split(' ').slice(0, -1).join(' ')} <span className="text-purple-400">{currentSlideData.title.split(' ').pop()}</span>
+              </h1>
+              <h2 className="text-3xl font-serif font-bold mb-6 text-gray-200">{currentSlideData.subtitle}</h2>
 
-            <p className="text-lg text-gray-300 max-w-2xl leading-relaxed mb-8">
-              Empowering government training programs with comprehensive partner management and student tracking
-              capabilities through modern technology.
-            </p>
+              <p className="text-lg text-gray-300 max-w-2xl leading-relaxed mb-8">
+                {currentSlideData.description}
+              </p>
+            </div>
 
             <div className="flex space-x-4">
-              <div className="w-3 h-3 bg-purple-400 rounded-full"></div>
-              <div className="w-3 h-3 bg-white/50 rounded-full"></div>
-              <div className="w-3 h-3 bg-white/30 rounded-full"></div>
+              {heroSlides.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentSlide(index)}
+                  className={`w-3 h-3 rounded-full transition-all duration-300 hover:scale-110 ${
+                    index === currentSlide 
+                      ? "bg-purple-400 shadow-lg shadow-purple-400/50" 
+                      : "bg-white/50 hover:bg-white/70"
+                  }`}
+                  aria-label={`Go to slide ${index + 1}`}
+                />
+              ))}
             </div>
           </div>
         </div>

@@ -34,7 +34,7 @@ export default function TPRegisterPage() {
   return (
     <PublicLayout>
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-br from-primary/5 to-secondary/5">
+      <section className="py-32 mt-16 bg-gradient-to-br from-primary/5 to-secondary/5">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-6">Become a Training Partner</h1>
@@ -74,7 +74,7 @@ export default function TPRegisterPage() {
               <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-primary-foreground font-bold text-xl">1</span>
               </div>
-              <h3 className="font-semibold mb-2">Submit Application</h3>
+              <h3 className="font-semibold mb-2">Submit<br />Application</h3>
               <p className="text-sm text-muted-foreground">Complete the registration form with organization details</p>
             </div>
 
@@ -82,7 +82,7 @@ export default function TPRegisterPage() {
               <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-primary-foreground font-bold text-xl">2</span>
               </div>
-              <h3 className="font-semibold mb-2">Document Verification</h3>
+              <h3 className="font-semibold mb-2">Document<br />Verification</h3>
               <p className="text-sm text-muted-foreground">Upload required documents for verification</p>
             </div>
 
@@ -90,7 +90,7 @@ export default function TPRegisterPage() {
               <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-primary-foreground font-bold text-xl">3</span>
               </div>
-              <h3 className="font-semibold mb-2">Facility Inspection</h3>
+              <h3 className="font-semibold mb-2">Facility<br />Inspection</h3>
               <p className="text-sm text-muted-foreground">On-site verification of training infrastructure</p>
             </div>
 

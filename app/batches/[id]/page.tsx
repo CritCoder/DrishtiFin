@@ -173,17 +173,9 @@ export default function BatchDetailPage({ params }: Props) {
 
       {/* Header */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <Link href="/batches">
-            <Button variant="outline" size="sm">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Batches
-            </Button>
-          </Link>
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">{batch.name}</h1>
-            <p className="text-gray-600">{batch.tp} • {batch.enrolled}/{batch.capacity} students</p>
-          </div>
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">{batch.name}</h1>
+          <p className="text-gray-600">{batch.tp} • {batch.enrolled}/{batch.capacity} students</p>
         </div>
         <div className="flex items-center gap-3">
           <Badge className={getStatusColor(batch.status)}>

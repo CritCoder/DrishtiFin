@@ -1,11 +1,9 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
-import { Loader } from "@googlemaps/js-api-loader"
+import { useEffect, useRef, useState, useCallback } from "react"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { MapPin } from "lucide-react"
+import { MapPin, Search } from "lucide-react"
 
 interface AddressComponents {
   fullAddress: string
@@ -26,131 +24,170 @@ interface AddressAutocompleteProps {
   fullAddress?: string
 }
 
+interface PincodeData {
+  Name: string
+  Block: string
+  District: string
+  State: string
+  Country: string
+}
+
 export function AddressAutocomplete({
   onAddressSelect,
-  placeholder = "Start typing address...",
+  placeholder = "Start typing address or PIN code...",
   label = "Address",
   required = false,
   disabled = false,
   className = "",
   fullAddress = ""
 }: AddressAutocompleteProps) {
-  const inputRef = useRef<HTMLInputElement>(null)
-  const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null)
-  const [isLoaded, setIsLoaded] = useState(false)
   const [inputValue, setInputValue] = useState(fullAddress)
+  const [suggestions, setSuggestions] = useState<string[]>([])
+  const [showSuggestions, setShowSuggestions] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const inputRef = useRef<HTMLInputElement>(null)
+  const suggestionsRef = useRef<HTMLDivElement>(null)
 
-  // Google Maps API key - you'll need to set this in environment variables
-  const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "YOUR_API_KEY"
+  // Sample Indian cities for autocomplete
+  const indianCities = [
+    "Mumbai, Maharashtra", "Delhi, Delhi", "Bangalore, Karnataka", "Chennai, Tamil Nadu",
+    "Kolkata, West Bengal", "Hyderabad, Telangana", "Pune, Maharashtra", "Ahmedabad, Gujarat",
+    "Surat, Gujarat", "Jaipur, Rajasthan", "Lucknow, Uttar Pradesh", "Kanpur, Uttar Pradesh",
+    "Nagpur, Maharashtra", "Indore, Madhya Pradesh", "Thane, Maharashtra", "Bhopal, Madhya Pradesh",
+    "Visakhapatnam, Andhra Pradesh", "Patna, Bihar", "Vadodara, Gujarat", "Ghaziabad, Uttar Pradesh",
+    "Ludhiana, Punjab", "Agra, Uttar Pradesh", "Nashik, Maharashtra", "Faridabad, Haryana",
+    "Meerut, Uttar Pradesh", "Rajkot, Gujarat", "Kalyan, Maharashtra", "Vasai-Virar, Maharashtra",
+    "Varanasi, Uttar Pradesh", "Srinagar, Jammu and Kashmir", "Aurangabad, Maharashtra",
+    "Dhanbad, Jharkhand", "Amritsar, Punjab", "Navi Mumbai, Maharashtra", "Allahabad, Uttar Pradesh",
+    "Ranchi, Jharkhand", "Howrah, West Bengal", "Coimbatore, Tamil Nadu", "Jabalpur, Madhya Pradesh",
+    "Gwalior, Madhya Pradesh", "Vijayawada, Andhra Pradesh", "Jodhpur, Rajasthan", "Madurai, Tamil Nadu",
+    "Raipur, Chhattisgarh", "Kota, Rajasthan", "Gurgaon, Haryana", "Chandigarh, Chandigarh",
+    "Solapur, Maharashtra", "Hubballi-Dharwad, Karnataka", "Tiruchirappalli, Tamil Nadu"
+  ]
 
+  // Function to search pincode using India Post API
+  const searchByPincode = async (pincode: string): Promise<PincodeData[]> => {
+    try {
+      const response = await fetch(`https://api.postalpincode.in/pincode/${pincode}`)
+      const data = await response.json()
+      
+      if (data && data[0] && data[0].Status === "Success") {
+        return data[0].PostOffice || []
+      }
+      return []
+    } catch (error) {
+      console.error('Error fetching pincode data:', error)
+      return []
+    }
+  }
+
+  // Debounced search function
   useEffect(() => {
-    const initializeAutocomplete = async () => {
-      if (!inputRef.current || autocompleteRef.current || !GOOGLE_MAPS_API_KEY || GOOGLE_MAPS_API_KEY === "YOUR_API_KEY") {
-        // Fallback to regular input if API key is not configured
-        setIsLoaded(true)
+    const delayedSearch = setTimeout(async () => {
+      if (inputValue.length < 2) {
+        setSuggestions([])
+        setShowSuggestions(false)
         return
       }
 
-      try {
-        const loader = new Loader({
-          apiKey: GOOGLE_MAPS_API_KEY,
-          version: "weekly",
-          libraries: ["places"]
-        })
+      setIsLoading(true)
+      let newSuggestions: string[] = []
 
-        await loader.load()
-
-        const autocomplete = new google.maps.places.Autocomplete(inputRef.current, {
-          types: ["address"],
-          componentRestrictions: { country: "in" }, // Restrict to India
-          fields: ["address_components", "formatted_address", "geometry"]
-        })
-
-        autocomplete.addListener("place_changed", () => {
-          const place = autocomplete.getPlace()
-          
-          if (place.address_components && place.formatted_address) {
-            const addressComponents: AddressComponents = {
-              fullAddress: place.formatted_address,
-              street: "",
-              city: "",
-              state: "",
-              pincode: "",
-              country: ""
-            }
-
-            // Parse address components
-            place.address_components.forEach(component => {
-              const types = component.types
-              const value = component.long_name
-
-              if (types.includes("street_number") || types.includes("route")) {
-                addressComponents.street += (addressComponents.street ? " " : "") + value
-              } else if (types.includes("locality") || types.includes("administrative_area_level_2")) {
-                addressComponents.city = value
-              } else if (types.includes("administrative_area_level_1")) {
-                addressComponents.state = value
-              } else if (types.includes("postal_code")) {
-                addressComponents.pincode = value
-              } else if (types.includes("country")) {
-                addressComponents.country = value
-              }
-            })
-
-            // If street is empty, try sublocality
-            if (!addressComponents.street) {
-              place.address_components.forEach(component => {
-                if (component.types.includes("sublocality") || component.types.includes("sublocality_level_1")) {
-                  addressComponents.street = component.long_name
-                }
-              })
-            }
-
-            setInputValue(place.formatted_address)
-            onAddressSelect(addressComponents)
-          }
-        })
-
-        autocompleteRef.current = autocomplete
-        setIsLoaded(true)
-      } catch (error) {
-        console.error("Error loading Google Maps API:", error)
-        setIsLoaded(true) // Fallback to regular input
+      // Check if input is a PIN code (6 digits)
+      if (/^\d{6}$/.test(inputValue)) {
+        const pincodeData = await searchByPincode(inputValue)
+        newSuggestions = pincodeData.map(place => 
+          `${place.Name}, ${place.District}, ${place.State} - ${inputValue}`
+        ).slice(0, 5)
+      } else {
+        // Search in Indian cities
+        newSuggestions = indianCities
+          .filter(city => city.toLowerCase().includes(inputValue.toLowerCase()))
+          .slice(0, 8)
       }
-    }
 
-    initializeAutocomplete()
+      setSuggestions(newSuggestions)
+      setShowSuggestions(newSuggestions.length > 0)
+      setIsLoading(false)
+    }, 300)
 
-    return () => {
-      if (autocompleteRef.current) {
-        google.maps.event.clearInstanceListeners(autocompleteRef.current)
-      }
-    }
-  }, [onAddressSelect, GOOGLE_MAPS_API_KEY])
+    return () => clearTimeout(delayedSearch)
+  }, [inputValue])
 
-  // Update input value when fullAddress prop changes
+  // Handle click outside to close suggestions
   useEffect(() => {
-    setInputValue(fullAddress)
-  }, [fullAddress])
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        inputRef.current && 
+        suggestionsRef.current &&
+        !inputRef.current.contains(event.target as Node) &&
+        !suggestionsRef.current.contains(event.target as Node)
+      ) {
+        setShowSuggestions(false)
+      }
+    }
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value)
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
+  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    setInputValue(value)
     
-    // If Google Places is not loaded, still allow manual typing
-    if (!autocompleteRef.current) {
-      onAddressSelect({
-        fullAddress: e.target.value,
-        street: "",
-        city: "",
-        state: "",
-        pincode: "",
-        country: "India"
-      })
+    // Always update the parent with current input
+    onAddressSelect({
+      fullAddress: value,
+      street: "",
+      city: "",
+      state: "",
+      pincode: "",
+      country: "India"
+    })
+  }, [onAddressSelect])
+
+  const handleSuggestionClick = useCallback((suggestion: string) => {
+    setInputValue(suggestion)
+    setShowSuggestions(false)
+    
+    // Parse the suggestion to extract components
+    const parts = suggestion.split(', ')
+    let street = "", city = "", state = "", pincode = ""
+    
+    if (parts.length >= 2) {
+      street = parts[0]
+      city = parts[1]
+      if (parts.length >= 3) {
+        // Check if last part contains pincode
+        const lastPart = parts[parts.length - 1]
+        const pincodeMatch = lastPart.match(/(\d{6})$/)
+        if (pincodeMatch) {
+          pincode = pincodeMatch[1]
+          state = parts[parts.length - 2]
+        } else {
+          state = lastPart
+        }
+      }
+    }
+    
+    onAddressSelect({
+      fullAddress: suggestion,
+      street,
+      city,
+      state,
+      pincode,
+      country: "India"
+    })
+  }, [onAddressSelect])
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      setShowSuggestions(false)
     }
   }
 
   return (
-    <div className={`space-y-2 ${className}`}>
+    <div className={`relative space-y-2 ${className}`}>
       {label && (
         <Label htmlFor="address-autocomplete">
           {label}
@@ -159,24 +196,46 @@ export function AddressAutocomplete({
       )}
       <div className="relative">
         <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 h-4 w-4" />
+        {isLoading && (
+          <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 h-4 w-4 animate-spin" />
+        )}
         <Input
           ref={inputRef}
           id="address-autocomplete"
           type="text"
-          placeholder={isLoaded ? placeholder : "Loading map services..."}
+          placeholder={placeholder}
           value={inputValue}
           onChange={handleInputChange}
-          disabled={disabled || !isLoaded}
-          className={`pl-10 ${className}`}
+          onKeyDown={handleKeyDown}
+          disabled={disabled}
+          className={`pl-10 ${isLoading ? 'pr-10' : ''} ${className}`}
+          autoComplete="off"
         />
+        
+        {/* Suggestions Dropdown */}
+        {showSuggestions && suggestions.length > 0 && (
+          <div
+            ref={suggestionsRef}
+            className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-y-auto"
+          >
+            {suggestions.map((suggestion, index) => (
+              <div
+                key={index}
+                className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm border-b border-gray-50 last:border-b-0"
+                onClick={() => handleSuggestionClick(suggestion)}
+              >
+                <div className="flex items-center">
+                  <MapPin className="h-3 w-3 text-gray-400 mr-2 flex-shrink-0" />
+                  <span>{suggestion}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
-      {!isLoaded && (
-        <p className="text-xs text-slate-500">
-          {GOOGLE_MAPS_API_KEY === "YOUR_API_KEY" 
-            ? "Configure Google Maps API key for address autocomplete" 
-            : "Loading address suggestions..."}
-        </p>
-      )}
+      <p className="text-xs text-slate-500">
+        Type a city name or 6-digit PIN code for suggestions
+      </p>
     </div>
   )
 }
@@ -207,7 +266,7 @@ export function AddressForm({
   // Update parent component when address changes
   useEffect(() => {
     onAddressChange(address)
-  }, [address, onAddressChange])
+  }, [address]) // Removed onAddressChange from dependencies to prevent infinite loop
 
   const updateField = (field: keyof AddressComponents, value: string) => {
     setAddress(prev => ({ ...prev, [field]: value }))

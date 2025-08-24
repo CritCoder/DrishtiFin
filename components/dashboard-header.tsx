@@ -44,9 +44,9 @@ export function DashboardHeader({ title, subtitle }: DashboardHeaderProps) {
 
   return (
     <header className="bg-sidebar border-b border-sidebar-border h-16 flex-shrink-0">
-      <div className="px-6 h-16 flex items-center justify-between">
+      <div className="px-6 h-16 flex items-center relative">
           {/* Left - Breadcrumbs */}
-          <nav className="flex items-center space-x-2 text-sm">
+          <nav className="flex items-center space-x-2 text-sm flex-1">
             {breadcrumbs.map((crumb, index) => (
               <div key={index} className="flex items-center">
                 {index === 0 && <Home className="w-4 h-4 mr-1 text-slate-500" />}
@@ -62,8 +62,8 @@ export function DashboardHeader({ title, subtitle }: DashboardHeaderProps) {
             ))}
           </nav>
 
-          {/* Center - Search */}
-          <div className="flex-1 flex justify-center px-8">
+          {/* Center - Search (absolutely centered) */}
+          <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
             <Button
               variant="outline"
               onClick={open}
@@ -79,7 +79,7 @@ export function DashboardHeader({ title, subtitle }: DashboardHeaderProps) {
           </div>
 
           {/* Right - Notifications only */}
-          <div className="flex items-center">
+          <div className="flex items-center justify-end flex-1">
             <div className="relative">
               <Button variant="ghost" size="sm" className="relative text-slate-600 hover:bg-slate-100">
                 <Bell className="w-5 h-5" />

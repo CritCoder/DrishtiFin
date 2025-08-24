@@ -237,6 +237,7 @@ export function DashboardSidebar({ activeItem }: DashboardSidebarProps) {
             <nav className="space-y-1">
               {visibleShortcuts.map((item) => {
                 const Icon = item.icon
+                const isActive = activeItem === item.id
 
                 return (
                   <Link key={item.id} href={item.href}>
@@ -245,6 +246,7 @@ export function DashboardSidebar({ activeItem }: DashboardSidebarProps) {
                       size="sm"
                       className={cn(
                         "w-full justify-start text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                        isActive && "bg-black text-white hover:bg-black hover:shadow-lg hover:shadow-gray-500/30 shadow-md border-l-4 border-gray-400",
                         isCollapsed && "px-2",
                       )}
                     >

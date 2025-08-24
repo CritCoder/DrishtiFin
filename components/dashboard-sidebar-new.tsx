@@ -99,7 +99,7 @@ const shortcuts = [
     roles: ["osda_admin", "training_partner"],
   },
   {
-    id: "upload_files", 
+    id: "files_upload", 
     label: "Upload Files",
     href: "/files/upload",
     icon: Upload,
@@ -247,11 +247,15 @@ export function DashboardSidebar({ activeItem }: DashboardSidebarProps) {
               <nav className={cn("px-3", isCollapsed ? "space-y-3" : "space-y-1")}>
                 {visibleShortcuts.map((item) => {
                   const Icon = item.icon
+                  const isActive = activeItem === item.id
                   return (
                     <Link key={item.id} href={item.href}>
                       <div
                         className={cn(
-                          "group flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-all duration-200",
+                          "group flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200",
+                          isActive
+                            ? "bg-gray-900 text-white shadow-sm"
+                            : "text-gray-600 hover:bg-gray-100 hover:text-gray-900",
                           isCollapsed && "justify-center px-2"
                         )}
                       >

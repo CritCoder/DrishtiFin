@@ -1,3 +1,5 @@
+"use client"
+
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -12,6 +14,31 @@ export default function TrainingPartnersPage() {
     { id: 3, name: "Skill Development Corp", status: "Active", trustScore: 91, centres: 15, students: 680 },
   ]
 
+  const handleExportCSV = () => {
+    const csvData = [
+      ['ID', 'Name', 'Status', 'Trust Score', 'Centres', 'Students'],
+      ...tps.map((tp) => [
+        tp.id.toString(),
+        tp.name,
+        tp.status,
+        tp.trustScore.toString(),
+        tp.centres.toString(),
+        tp.students.toString()
+      ])
+    ]
+    
+    const csvContent = csvData.map(row => row.join(',')).join('\n')
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+    const link = document.createElement('a')
+    const url = URL.createObjectURL(blob)
+    link.setAttribute('href', url)
+    link.setAttribute('download', `training_partners_${new Date().toISOString().slice(0, 10)}.csv`)
+    link.style.visibility = 'hidden'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+
   return (
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
@@ -20,7 +47,7 @@ export default function TrainingPartnersPage() {
           <p className="text-slate-600">Manage and monitor training partner organizations</p>
         </div>
         <div className="flex gap-3">
-          <Button variant="outline" size="sm" className="font-open-sans bg-transparent">
+          <Button variant="outline" size="sm" className="font-open-sans bg-transparent" onClick={handleExportCSV}>
             <Download className="h-4 w-4 mr-2" />
             Export CSV
           </Button>
