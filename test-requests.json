@@ -1,0 +1,85 @@
+{
+  "info": {
+    "name": "DRISHTI API Tests",
+    "description": "Comprehensive API test collection for DRISHTI platform"
+  },
+  "requests": [
+    {
+      "name": "Health Check",
+      "method": "GET",
+      "url": "{{base_url}}/",
+      "description": "Basic health check endpoint"
+    },
+    {
+      "name": "User Registration",
+      "method": "POST",
+      "url": "{{base_url}}/api/auth/register",
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "email": "test@example.com",
+        "password": "password123",
+        "role": "student",
+        "firstName": "Test",
+        "lastName": "User",
+        "phone": "1234567890"
+      }
+    },
+    {
+      "name": "User Login",
+      "method": "POST",
+      "url": "{{base_url}}/api/auth/login",
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "email": "admin@drishti.gov.in",
+        "password": "admin123",
+        "role": "osda_admin"
+      }
+    },
+    {
+      "name": "Get Training Partners",
+      "method": "GET",
+      "url": "{{base_url}}/api/training-partners",
+      "headers": {
+        "Authorization": "Bearer {{jwt_token}}"
+      }
+    },
+    {
+      "name": "Create Training Partner",
+      "method": "POST",
+      "url": "{{base_url}}/api/training-partners",
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer {{jwt_token}}"
+      },
+      "body": {
+        "name": "Test Training Center",
+        "email": "test@training.com",
+        "phone": "9876543210",
+        "address": "123 Test Street, Test City",
+        "gstNumber": "27AARFT0123A1Z5",
+        "panNumber": "AARFT0123A",
+        "contactPerson": "John Doe"
+      }
+    },
+    {
+      "name": "GSTN Verification",
+      "method": "POST",
+      "url": "{{base_url}}/api/integrations/gstn/verify",
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer {{jwt_token}}"
+      },
+      "body": {
+        "gstin": "27AARFR5953J1ZF"
+      }
+    }
+  ],
+  "variables": {
+    "base_url": "https://dhr.deno.dev",
+    "jwt_token": "your_jwt_token_here"
+  }
+}

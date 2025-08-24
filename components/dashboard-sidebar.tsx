@@ -1,0 +1,261 @@
+"use client"
+
+import { useState } from "react"
+import {
+  BarChart3,
+  Users,
+  GraduationCap,
+  Briefcase,
+  CreditCard,
+  CheckCircle,
+  FileText,
+  Shield,
+  Settings,
+  Menu,
+  X,
+  UserCheck,
+  TrendingUp,
+  Upload,
+  Search,
+  LogOut,
+} from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
+import Link from "next/link"
+import { useAuth, getRoleDisplayName } from "@/lib/auth"
+
+const navigationItems = [
+  {
+    id: "analytics_overview",
+    label: "Analytics",
+    icon: BarChart3,
+    href: "/",
+    roles: ["admin", "training_partner", "student", "auditor", "finance"],
+  },
+  {
+    id: "tp_list",
+    label: "Training Partners",
+    icon: Users,
+    href: "/tps",
+    roles: ["admin", "auditor"],
+  },
+  {
+    id: "batches_list",
+    label: "Batches",
+    icon: GraduationCap,
+    href: "/batches",
+    roles: ["admin", "training_partner", "auditor"],
+  },
+  {
+    id: "placements_list",
+    label: "Placements",
+    icon: Briefcase,
+    href: "/placements",
+    roles: ["admin", "training_partner", "auditor", "finance"],
+  },
+  {
+    id: "payments_milestones",
+    label: "Payments",
+    icon: CreditCard,
+    href: "/payments",
+    roles: ["admin", "finance"],
+  },
+  {
+    id: "approvals_list",
+    label: "Approvals",
+    icon: CheckCircle,
+    href: "/approvals",
+    roles: ["admin", "auditor"],
+  },
+  {
+    id: "reports_export",
+    label: "Reports",
+    icon: FileText,
+    href: "/reports",
+    roles: ["admin", "auditor", "finance"],
+  },
+  {
+    id: "audit_logs",
+    label: "Audit Logs",
+    icon: Shield,
+    href: "/audit-logs",
+    roles: ["admin", "auditor"],
+  },
+  {
+    id: "settings_general",
+    label: "Settings",
+    icon: Settings,
+    href: "/settings",
+    roles: ["admin"],
+  },
+]
+
+const shortcuts = [
+  {
+    id: "tp_create",
+    label: "New Training Partner",
+    icon: UserCheck,
+    href: "/tps/new",
+    roles: ["admin"],
+  },
+  {
+    id: "batches_create",
+    label: "New Batch",
+    icon: GraduationCap,
+    href: "/batches/new",
+    roles: ["admin", "training_partner"],
+  },
+  {
+    id: "files_upload",
+    label: "Upload Files",
+    icon: Upload,
+    href: "/files/upload",
+    roles: ["admin", "training_partner"],
+  },
+  {
+    id: "integrations_gstn_verify",
+    label: "GSTN Verification",
+    icon: Search,
+    href: "/integrations/gstn",
+    roles: ["admin", "auditor"],
+  },
+]
+
+interface DashboardSidebarProps {
+  activeItem?: string
+}
+
+export function DashboardSidebar({ activeItem }: DashboardSidebarProps) {
+  const [isCollapsed, setIsCollapsed] = useState(false)
+  const { user, logout } = useAuth()
+
+  const visibleNavigationItems = navigationItems.filter((item) => user && item.roles.includes(user.role))
+
+  const visibleShortcuts = shortcuts.filter((item) => user && item.roles.includes(user.role))
+
+  return (
+    <div
+      className={cn(
+        "flex flex-col h-screen bg-sidebar border-r border-sidebar-border transition-all duration-300",
+        isCollapsed ? "w-16" : "w-64",
+      )}
+    >
+      {/* Header */}
+      <div className="flex items-center justify-between p-4 border-b border-sidebar-border">
+        {!isCollapsed && (
+          <div className="flex items-center space-x-2">
+            <div className="w-8 h-8 bg-sidebar-accent rounded-lg flex items-center justify-center">
+              <TrendingUp className="w-5 h-5 text-sidebar-accent-foreground" />
+            </div>
+            <Link href="/" className="font-montserrat font-bold text-lg text-sidebar-foreground">
+              DRISHTI
+            </Link>
+          </div>
+        )}
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setIsCollapsed(!isCollapsed)}
+          className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+        >
+          {isCollapsed ? <Menu className="w-4 h-4" /> : <X className="w-4 h-4" />}
+        </Button>
+      </div>
+
+      {/* Navigation */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-6">
+        <div>
+          {!isCollapsed && (
+            <h3 className="text-xs font-montserrat font-semibold text-muted-foreground uppercase tracking-wider mb-3">
+              Main Navigation
+            </h3>
+          )}
+          <nav className="space-y-1">
+            {visibleNavigationItems.map((item) => {
+              const Icon = item.icon
+              const isActive = activeItem === item.id
+
+              return (
+                <Link key={item.id} href={item.href}>
+                  <Button
+                    variant="ghost"
+                    className={cn(
+                      "w-full justify-start text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                      isActive && "bg-sidebar-accent text-sidebar-accent-foreground",
+                      isCollapsed && "px-2",
+                    )}
+                  >
+                    <Icon className={cn("w-4 h-4", !isCollapsed && "mr-3")} />
+                    {!isCollapsed && <span className="font-open-sans">{item.label}</span>}
+                  </Button>
+                </Link>
+              )
+            })}
+          </nav>
+        </div>
+
+        {visibleShortcuts.length > 0 && (
+          <div>
+            {!isCollapsed && (
+              <h3 className="text-xs font-montserrat font-semibold text-muted-foreground uppercase tracking-wider mb-3">
+                Quick Actions
+              </h3>
+            )}
+            <nav className="space-y-1">
+              {visibleShortcuts.map((item) => {
+                const Icon = item.icon
+
+                return (
+                  <Link key={item.id} href={item.href}>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className={cn(
+                        "w-full justify-start text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                        isCollapsed && "px-2",
+                      )}
+                    >
+                      <Icon className={cn("w-4 h-4", !isCollapsed && "mr-3")} />
+                      {!isCollapsed && <span className="font-open-sans text-sm">{item.label}</span>}
+                    </Button>
+                  </Link>
+                )
+              })}
+            </nav>
+          </div>
+        )}
+      </div>
+
+      {/* Footer */}
+      <div className="p-4 border-t border-sidebar-border">
+        <div className={cn("flex items-center", isCollapsed ? "justify-center" : "space-x-3")}>
+          <div className="w-8 h-8 bg-muted rounded-full flex items-center justify-center">
+            <span className="text-sm font-montserrat font-semibold text-muted-foreground">
+              {user?.name?.charAt(0).toUpperCase() || "U"}
+            </span>
+          </div>
+          {!isCollapsed && (
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-open-sans font-medium text-sidebar-foreground truncate">
+                {user?.name || "User"}
+              </p>
+              <p className="text-xs text-muted-foreground truncate">{user ? getRoleDisplayName(user.role) : ""}</p>
+            </div>
+          )}
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+            onClick={() => {
+              if (confirm("Are you sure you want to logout?")) {
+                logout()
+              }
+            }}
+          >
+            <LogOut className="w-4 h-4" />
+          </Button>
+        </div>
+      </div>
+    </div>
+  )
+}
