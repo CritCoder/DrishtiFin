@@ -79,107 +79,61 @@ export default function GSTNVerificationPage() {
     setIsVerifying(true)
     setError(null)
 
-    // Simulate API call delay
-    await new Promise((resolve) => setTimeout(resolve, 2000))
-
-    // Mock response based on provided example
-    let result: VerificationResult
-    if (gstin === "27AARFR5953J1ZF") {
-      result = {
-        data: {
-          gstin: "27AARFR5953J1ZF",
-          lgnm: "RISEMETRIC TECHNOLOGY LLP",
-          tradeNam: "RISEMETRIC TECHNOLOGY LLP",
-          sts: "Cancelled",
-          dty: "Regular",
-          ctb: "Limited Liability Partnership",
-          rgdt: "01/07/2017",
-          cxdt: "17/03/2020",
-          lstupdt: "17/03/2020",
-          pradr: {
-            addr: {
-              bnm: "KAPIL BUILDING",
-              loc: "MANVELPADA, VIRAR EAST",
-              st: "RUSHIVIHAR COMPLEX",
-              bno: "I-404",
-              dst: "Thane",
-              pncd: "401305",
-              stcd: "Maharashtra",
-              flno: "4TH FLOOR",
-            },
-            ntr: "Others",
-          },
-          adadr: [
-            {
-              addr: {
-                bnm: "Crescent Business Park",
-                loc: "sakinaka, andheri",
-                st: "Andheri Kurla road",
-                bno: "814",
-                dst: "Mumbai",
-                pncd: "400072",
-                stcd: "Maharashtra",
-                flno: "8th Floor",
-              },
-              ntr: "Others",
-            },
-          ],
-          nba: ["Others"],
-          einvoiceStatus: "No",
+    try {
+      const response = await fetch('/api/gst/verify', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-        status_cd: "1",
-      }
-    } else {
-      // Mock other GSTIN responses
-      result = {
-        data: {
-          gstin: gstin,
-          lgnm: "Sample Company Pvt Ltd",
-          tradeNam: "Sample Company",
-          sts: "Active",
-          dty: "Regular",
-          ctb: "Private Limited Company",
-          rgdt: "01/04/2018",
-          cxdt: "",
-          lstupdt: "15/01/2024",
-          pradr: {
-            addr: {
-              bnm: "Business Center",
-              loc: "Commercial Area",
-              st: "Main Road",
-              bno: "123",
-              dst: "Mumbai",
-              pncd: "400001",
-              stcd: "Maharashtra",
-              flno: "Ground Floor",
-            },
-            ntr: "Others",
-          },
-          adadr: [],
-          nba: ["Others"],
-          einvoiceStatus: "Yes",
-        },
-        status_cd: "1",
-      }
-    }
-    
-    setVerificationResult(result)
-    
-    // Add to recent verifications (avoid duplicates)
-    const newVerification = {
-      id: Date.now(),
-      gstin: result.data.gstin,
-      companyName: result.data.lgnm,
-      status: result.data.sts === "Active" ? "Verified" : result.data.sts,
-      date: new Date().toISOString().split('T')[0]
-    }
-    
-    setRecentVerifications(prev => {
-      const filtered = prev.filter(v => v.gstin !== newVerification.gstin)
-      return [newVerification, ...filtered].slice(0, 10) // Keep only last 10
-    })
+        body: JSON.stringify({ gstin }),
+      })
 
-    setIsVerifying(false)
+      const apiResult = await response.json()
+
+      if (response.ok && apiResult.success) {
+        const result: VerificationResult = {
+          data: {
+            gstin: apiResult.data.gstin,
+            lgnm: apiResult.data.lgnm,
+            tradeNam: apiResult.data.tradeNam,
+            sts: apiResult.data.sts,
+            dty: apiResult.data.dty,
+            ctb: apiResult.data.ctb,
+            rgdt: apiResult.data.rgdt,
+            cxdt: apiResult.data.cxdt || "",
+            lstupdt: apiResult.data.lstupdt,
+            pradr: apiResult.data.pradr,
+            adadr: apiResult.data.adadr || [],
+            nba: apiResult.data.nba || [],
+            einvoiceStatus: apiResult.data.einvoiceStatus,
+          },
+          status_cd: "1",
+        }
+
+        setVerificationResult(result)
+        
+        // Add to recent verifications (avoid duplicates)
+        const newVerification = {
+          id: Date.now(),
+          gstin: result.data.gstin,
+          companyName: result.data.lgnm,
+          status: result.data.sts === "Active" ? "Verified" : result.data.sts,
+          date: new Date().toISOString().split('T')[0]
+        }
+        
+        setRecentVerifications(prev => {
+          const filtered = prev.filter(v => v.gstin !== newVerification.gstin)
+          return [newVerification, ...filtered].slice(0, 10) // Keep only last 10
+        })
+      } else {
+        setError(apiResult.error || "GST verification failed")
+      }
+    } catch (err) {
+      console.error('GST verification error:', err)
+      setError("Verification failed. Please check your connection and try again.")
+    } finally {
+      setIsVerifying(false)
+    }
   }
 
   const formatDate = (dateStr: string) => {

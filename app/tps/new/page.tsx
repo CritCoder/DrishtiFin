@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { AddressAutocomplete } from "@/components/ui/address-autocomplete"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 
@@ -125,12 +126,13 @@ export default function NewTrainingPartnerPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="address">Address</Label>
-              <Textarea 
-                id="address" 
-                placeholder="Enter complete address"
-                value={formData.address}
-                onChange={(e) => handleInputChange('address', e.target.value)}
+              <AddressAutocomplete
+                label="Address"
+                placeholder="Start typing address..."
+                fullAddress={formData.address}
+                onAddressSelect={(addressComponents) => {
+                  handleInputChange('address', addressComponents.fullAddress)
+                }}
               />
             </div>
 

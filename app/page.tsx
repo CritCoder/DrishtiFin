@@ -31,8 +31,8 @@ import Link from "next/link"
 import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import { PublicLayout } from "@/components/public-layout"
-import ThreeHeroBackground from "@/components/three-hero-background"
 import AnimatedCounter from "@/components/animated-counter"
+import { UnicornHeroBackground } from "@/components/unicorn-hero-background"
 
 export default function HomePage() {
   const [isVisible, setIsVisible] = useState(false)
@@ -44,162 +44,119 @@ export default function HomePage() {
   return (
     <PublicLayout>
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center overflow-hidden">
-        {/* Three.js Background */}
-        <ThreeHeroBackground />
+      <section className="relative min-h-screen w-full flex items-center justify-center overflow-hidden">
+        {/* UnicornStudio Background */}
+        <UnicornHeroBackground />
         
-        {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-900/80 via-slate-800/60 to-slate-900/90" style={{ zIndex: 2 }} />
-        
-        {/* Animated Background Elements */}
-        <div className="absolute inset-0 overflow-hidden" style={{ zIndex: 2 }}>
-          <motion.div 
-            className="absolute top-20 left-10 w-72 h-72 bg-blue-500/20 rounded-full blur-3xl"
-            animate={{ 
-              x: [0, 100, 0],
-              y: [0, -50, 0],
-              scale: [1, 1.2, 1]
-            }}
-            transition={{ 
-              duration: 20,
-              repeat: Infinity,
-              ease: "linear"
-            }}
-          />
-          <motion.div 
-            className="absolute bottom-20 right-10 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"
-            animate={{ 
-              x: [0, -80, 0],
-              y: [0, 60, 0],
-              scale: [1, 0.8, 1]
-            }}
-            transition={{ 
-              duration: 25,
-              repeat: Infinity,
-              ease: "linear"
-            }}
-          />
-          <motion.div 
-            className="absolute top-1/2 left-1/2 w-64 h-64 bg-cyan-500/15 rounded-full blur-3xl"
-            animate={{ 
-              x: [-128, 50, -128],
-              y: [-128, -200, -128],
-              scale: [1, 1.5, 1]
-            }}
-            transition={{ 
-              duration: 30,
-              repeat: Infinity,
-              ease: "linear"
-            }}
-          />
-        </div>
-
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center max-w-6xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-            >
-              <Badge
-                variant="secondary"
-                className="mb-8 px-6 py-3 text-base font-medium bg-white/10 text-white border-white/20 backdrop-blur-sm"
+        {/* Content Overlay */}
+        <div className="relative z-10 w-full">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center max-w-6xl mx-auto">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
               >
-                <Globe className="w-5 h-5 mr-2" />
-                Government of India Initiative
-              </Badge>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.2 }}
-            >
-              <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-8 leading-tight text-white">
-                Transforming Lives 
-                <br />
-                <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
-                  Across India
-                </span>
-              </h1>
-            </motion.div>
-
-            <motion.p
-              className="text-xl md:text-2xl text-white/80 mb-16 max-w-4xl mx-auto leading-relaxed"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-            >
-              Real impact, measurable results, sustainable growth
-            </motion.p>
-
-            <motion.div
-              className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-20"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
-            >
-              <Link href="/tp/register">
-                <Button
-                  size="lg"
-                  className="text-lg px-10 py-6 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-2xl shadow-blue-500/25 hover:shadow-3xl hover:shadow-blue-500/30 transition-all duration-300 transform hover:scale-105 border-0"
+                <Badge
+                  variant="secondary"
+                  className="mb-8 px-4 py-2 text-sm font-medium bg-white/10 text-white border border-white/20 shadow-lg backdrop-blur-md rounded-full"
                 >
-                  Join as Training Partner <ArrowRight className="ml-3 h-5 w-5" />
-                </Button>
-              </Link>
-              <Link href="/how-it-works">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="text-lg px-10 py-6 border-2 border-white/30 text-white hover:bg-white/10 backdrop-blur-sm transition-all duration-300 bg-transparent"
-                >
-                  Discover How It Works
-                </Button>
-              </Link>
-            </motion.div>
+                  <Globe className="w-4 h-4 mr-2" />
+                  Government of India Initiative
+                </Badge>
+              </motion.div>
 
-            <motion.div
-              className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-5xl mx-auto"
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.8 }}
-            >
-              <div className="text-center group">
-                <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:bg-white/15 transition-all duration-300 transform hover:scale-105">
-                  <div className="text-3xl md:text-4xl font-bold text-white mb-2">
-                    <AnimatedCounter value={1247} />
-                  </div>
-                  <div className="text-sm text-white/80 font-medium">Active Training Partners</div>
-                </div>
-              </div>
-              
-              <div className="text-center group">
-                <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:bg-white/15 transition-all duration-300 transform hover:scale-105">
-                  <div className="text-3xl md:text-4xl font-bold text-white mb-2">
-                    <AnimatedCounter value={28934} />
-                  </div>
-                  <div className="text-sm text-white/80 font-medium">Students Trained</div>
-                </div>
-              </div>
+              <motion.div
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1, delay: 0.2 }}
+              >
+                <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-8 leading-tight text-white" style={{ fontFamily: 'var(--font-instrument-sans)' }}>
+                  Transforming Lives 
+                  <br />
+                  <span className="text-white/90">
+                    Across India
+                  </span>
+                </h1>
+              </motion.div>
 
-              <div className="text-center group">
-                <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:bg-white/15 transition-all duration-300 transform hover:scale-105">
-                  <div className="text-3xl md:text-4xl font-bold text-white mb-2">
-                    <AnimatedCounter value={78} suffix="%" />
-                  </div>
-                  <div className="text-sm text-white/80 font-medium">Placement Rate</div>
-                </div>
-              </div>
+              <motion.p
+                className="text-xl md:text-2xl text-white mb-16 max-w-4xl mx-auto leading-relaxed font-medium"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.4 }}
+              >
+                Real impact, measurable results, sustainable growth
+              </motion.p>
 
-              <div className="text-center group">
-                <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:bg-white/15 transition-all duration-300 transform hover:scale-105">
-                  <div className="text-3xl md:text-4xl font-bold text-white mb-2">
-                    <AnimatedCounter value={3.2} suffix="L" prefix="₹" decimals={1} />
+              <motion.div
+                className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-20"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.6 }}
+              >
+                <Link href="/tp/register">
+                  <Button
+                    size="lg"
+                    className="text-lg px-10 py-6 bg-white text-black hover:bg-white/90 shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-105 border-0"
+                  >
+                    Join as Training Partner <ArrowRight className="ml-3 h-5 w-5" />
+                  </Button>
+                </Link>
+                <Link href="/how-it-works">
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="text-lg px-10 py-6 border-2 border-white/80 text-white hover:bg-white/10 backdrop-blur-sm transition-all duration-300 bg-white/5"
+                  >
+                    Discover How It Works
+                  </Button>
+                </Link>
+              </motion.div>
+
+              <motion.div
+                className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto"
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1, delay: 0.8 }}
+              >
+                <div className="text-center group">
+                  <div className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300">
+                    <div className="text-2xl md:text-3xl font-bold text-white mb-1" style={{ fontFamily: 'var(--font-instrument-sans)' }}>
+                      <AnimatedCounter value={1247} />
+                    </div>
+                    <div className="text-xs text-white/70 font-medium">Active Training Partners</div>
                   </div>
-                  <div className="text-sm text-white/80 font-medium">Average Salary</div>
                 </div>
-              </div>
-            </motion.div>
+                
+                <div className="text-center group">
+                  <div className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300">
+                    <div className="text-2xl md:text-3xl font-bold text-white mb-1" style={{ fontFamily: 'var(--font-instrument-sans)' }}>
+                      <AnimatedCounter value={28934} />
+                    </div>
+                    <div className="text-xs text-white/70 font-medium">Students Trained</div>
+                  </div>
+                </div>
+
+                <div className="text-center group">
+                  <div className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300">
+                    <div className="text-2xl md:text-3xl font-bold text-white mb-1" style={{ fontFamily: 'var(--font-instrument-sans)' }}>
+                      <AnimatedCounter value={78} suffix="%" />
+                    </div>
+                    <div className="text-xs text-white/70 font-medium">Placement Rate</div>
+                  </div>
+                </div>
+
+                <div className="text-center group">
+                  <div className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300">
+                    <div className="text-2xl md:text-3xl font-bold text-white mb-1" style={{ fontFamily: 'var(--font-instrument-sans)' }}>
+                      <AnimatedCounter value={3.2} suffix="L" prefix="₹" decimals={1} />
+                    </div>
+                    <div className="text-xs text-white/70 font-medium">Average Salary</div>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
           </div>
         </div>
       </section>
@@ -207,39 +164,71 @@ export default function HomePage() {
       {/* Mission & Vision Section */}
       <section className="py-32 bg-muted/30">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-20">
-            <h2 className="text-5xl md:text-6xl font-bold mb-8 text-foreground">
-              Our <span className="gradient-text">Mission & Vision</span>
+          <motion.div 
+            className="text-center mb-20"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-5xl md:text-6xl font-bold mb-8 text-foreground" style={{ fontFamily: 'var(--font-instrument-sans)' }}>
+              Our <span className="text-foreground/70">Mission & Vision</span>
             </h2>
             <p className="text-2xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
               Driving India's transformation through comprehensive skill development and training excellence.
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto">
-            <Card className="group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-3 border-0 bg-card/80 backdrop-blur-sm p-8">
-              <CardHeader className="text-center">
-                <Target className="h-16 w-16 text-primary mb-6 mx-auto group-hover:scale-110 transition-transform duration-300" />
-                <CardTitle className="text-3xl mb-6 text-foreground">Our Mission</CardTitle>
-                <CardDescription className="text-lg leading-relaxed text-muted-foreground">
-                  To create a unified, transparent, and efficient ecosystem for government training programs that
-                  empowers training partners, supports students, and connects skilled professionals with meaningful
-                  employment opportunities across India.
-                </CardDescription>
-              </CardHeader>
-            </Card>
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              viewport={{ once: true }}
+            >
+              <Card className="group hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-white/10 bg-white/5 backdrop-blur-md p-8 hover:bg-white/10 hover:border-white/20">
+                <CardHeader className="text-center">
+                  <motion.div
+                    className="mx-auto mb-6"
+                    whileHover={{ scale: 1.1, rotate: 5 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <Target className="h-16 w-16 text-foreground/80 group-hover:text-foreground transition-colors duration-300" />
+                  </motion.div>
+                  <CardTitle className="text-3xl mb-6 text-foreground group-hover:text-foreground/90 transition-colors duration-300" style={{ fontFamily: 'var(--font-instrument-sans)' }}>Our Mission</CardTitle>
+                  <CardDescription className="text-lg leading-relaxed text-muted-foreground group-hover:text-muted-foreground/90 transition-colors duration-300">
+                    To create a unified, transparent, and efficient ecosystem for government training programs that
+                    empowers training partners, supports students, and connects skilled professionals with meaningful
+                    employment opportunities across India.
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            </motion.div>
 
-            <Card className="group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-3 border-0 bg-card/80 backdrop-blur-sm p-8">
-              <CardHeader className="text-center">
-                <Eye className="h-16 w-16 text-primary mb-6 mx-auto group-hover:scale-110 transition-transform duration-300" />
-                <CardTitle className="text-3xl mb-6 text-foreground">Our Vision</CardTitle>
-                <CardDescription className="text-lg leading-relaxed text-muted-foreground">
-                  To be the cornerstone of India's skill development infrastructure, enabling a future where every
-                  citizen has access to quality training and employment opportunities, driving economic growth and
-                  social progress.
-                </CardDescription>
-              </CardHeader>
-            </Card>
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              viewport={{ once: true }}
+            >
+              <Card className="group hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-white/10 bg-white/5 backdrop-blur-md p-8 hover:bg-white/10 hover:border-white/20">
+                <CardHeader className="text-center">
+                  <motion.div
+                    className="mx-auto mb-6"
+                    whileHover={{ scale: 1.1, rotate: -5 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <Eye className="h-16 w-16 text-foreground/80 group-hover:text-foreground transition-colors duration-300" />
+                  </motion.div>
+                  <CardTitle className="text-3xl mb-6 text-foreground group-hover:text-foreground/90 transition-colors duration-300" style={{ fontFamily: 'var(--font-instrument-sans)' }}>Our Vision</CardTitle>
+                  <CardDescription className="text-lg leading-relaxed text-muted-foreground group-hover:text-muted-foreground/90 transition-colors duration-300">
+                    To be the cornerstone of India's skill development infrastructure, enabling a future where every
+                    citizen has access to quality training and employment opportunities, driving economic growth and
+                    social progress.
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -247,55 +236,94 @@ export default function HomePage() {
       {/* Features Section */}
       <section className="py-32">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-20">
-            <h2 className="text-5xl md:text-6xl font-bold mb-8 text-foreground">
-              Comprehensive Training <span className="gradient-text">Management</span>
+          <motion.div 
+            className="text-center mb-20"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-5xl md:text-6xl font-bold mb-8 text-foreground" style={{ fontFamily: 'var(--font-instrument-sans)' }}>
+              Comprehensive Training <span className="text-foreground/70">Management</span>
             </h2>
             <p className="text-2xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
               From partner onboarding to placement tracking, DRISHTI provides end-to-end solutions for India's skill
               development ecosystem with cutting-edge technology.
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid md:grid-cols-3 gap-12 max-w-7xl mx-auto">
-            <Card className="group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-3 border-0 bg-card/80 backdrop-blur-sm">
-              <CardHeader className="text-center p-10">
-                <div className="w-20 h-20 bg-gradient-to-br from-primary to-primary/70 rounded-3xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
-                  <Users className="h-10 w-10 text-white" />
-                </div>
-                <CardTitle className="text-2xl mb-6 text-foreground">Training Partner Management</CardTitle>
-                <CardDescription className="text-lg leading-relaxed text-muted-foreground">
-                  Streamlined onboarding, verification, and monitoring of training organizations across India with
-                  real-time compliance tracking.
-                </CardDescription>
-              </CardHeader>
-            </Card>
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.1 }}
+              viewport={{ once: true }}
+            >
+              <Card className="group hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-white/10 bg-white/5 backdrop-blur-md hover:bg-white/10 hover:border-white/20">
+                <CardHeader className="text-center p-10">
+                  <motion.div 
+                    className="w-20 h-20 bg-white/5 border border-white/20 rounded-3xl flex items-center justify-center mx-auto mb-6 group-hover:bg-white/10 group-hover:border-white/30 transition-all duration-300"
+                    whileHover={{ scale: 1.1, rotate: 5 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <Users className="h-10 w-10 text-foreground/80 group-hover:text-foreground transition-colors duration-300" />
+                  </motion.div>
+                  <CardTitle className="text-2xl mb-6 text-foreground group-hover:text-foreground/90 transition-colors duration-300" style={{ fontFamily: 'var(--font-instrument-sans)' }}>Training Partner Management</CardTitle>
+                  <CardDescription className="text-lg leading-relaxed text-muted-foreground group-hover:text-muted-foreground/90 transition-colors duration-300">
+                    Streamlined onboarding, verification, and monitoring of training organizations across India with
+                    real-time compliance tracking.
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            </motion.div>
 
-            <Card className="group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-3 border-0 bg-card/80 backdrop-blur-sm">
-              <CardHeader className="text-center p-10">
-                <div className="w-20 h-20 bg-gradient-to-br from-accent to-accent/70 rounded-3xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
-                  <BarChart3 className="h-10 w-10 text-white" />
-                </div>
-                <CardTitle className="text-2xl mb-6 text-foreground">Real-time Analytics</CardTitle>
-                <CardDescription className="text-lg leading-relaxed text-muted-foreground">
-                  Comprehensive dashboards and intelligent reports for tracking performance, placements, and outcomes
-                  with predictive insights.
-                </CardDescription>
-              </CardHeader>
-            </Card>
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              viewport={{ once: true }}
+            >
+              <Card className="group hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-white/10 bg-white/5 backdrop-blur-md hover:bg-white/10 hover:border-white/20">
+                <CardHeader className="text-center p-10">
+                  <motion.div 
+                    className="w-20 h-20 bg-white/5 border border-white/20 rounded-3xl flex items-center justify-center mx-auto mb-6 group-hover:bg-white/10 group-hover:border-white/30 transition-all duration-300"
+                    whileHover={{ scale: 1.1, rotate: 10 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <BarChart3 className="h-10 w-10 text-foreground/80 group-hover:text-foreground transition-colors duration-300" />
+                  </motion.div>
+                  <CardTitle className="text-2xl mb-6 text-foreground group-hover:text-foreground/90 transition-colors duration-300" style={{ fontFamily: 'var(--font-instrument-sans)' }}>Real-time Analytics</CardTitle>
+                  <CardDescription className="text-lg leading-relaxed text-muted-foreground group-hover:text-muted-foreground/90 transition-colors duration-300">
+                    Comprehensive dashboards and intelligent reports for tracking performance, placements, and outcomes
+                    with predictive insights.
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            </motion.div>
 
-            <Card className="group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-3 border-0 bg-card/80 backdrop-blur-sm">
-              <CardHeader className="text-center p-10">
-                <div className="w-20 h-20 bg-gradient-to-br from-chart-3 to-chart-3/70 rounded-3xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
-                  <Shield className="h-10 w-10 text-white" />
-                </div>
-                <CardTitle className="text-2xl mb-6 text-foreground">Quality Assurance</CardTitle>
-                <CardDescription className="text-lg leading-relaxed text-muted-foreground">
-                  Robust verification systems, comprehensive audit trails, and automated compliance monitoring for
-                  program integrity.
-                </CardDescription>
-              </CardHeader>
-            </Card>
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              viewport={{ once: true }}
+            >
+              <Card className="group hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-white/10 bg-white/5 backdrop-blur-md hover:bg-white/10 hover:border-white/20">
+                <CardHeader className="text-center p-10">
+                  <motion.div 
+                    className="w-20 h-20 bg-white/5 border border-white/20 rounded-3xl flex items-center justify-center mx-auto mb-6 group-hover:bg-white/10 group-hover:border-white/30 transition-all duration-300"
+                    whileHover={{ scale: 1.1, rotate: -10 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <Shield className="h-10 w-10 text-foreground/80 group-hover:text-foreground transition-colors duration-300" />
+                  </motion.div>
+                  <CardTitle className="text-2xl mb-6 text-foreground group-hover:text-foreground/90 transition-colors duration-300" style={{ fontFamily: 'var(--font-instrument-sans)' }}>Quality Assurance</CardTitle>
+                  <CardDescription className="text-lg leading-relaxed text-muted-foreground group-hover:text-muted-foreground/90 transition-colors duration-300">
+                    Robust verification systems, comprehensive audit trails, and automated compliance monitoring for
+                    program integrity.
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -304,8 +332,8 @@ export default function HomePage() {
       <section className="py-32 bg-muted/30">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
-            <h2 className="text-5xl md:text-6xl font-bold mb-8 text-foreground">
-              How <span className="gradient-text">DRISHTI</span> Works
+            <h2 className="text-5xl md:text-6xl font-bold mb-8 text-foreground" style={{ fontFamily: 'var(--font-instrument-sans)' }}>
+              How <span className="text-foreground/80">DRISHTI</span> Works
             </h2>
             <p className="text-2xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
               A streamlined process designed for efficiency, transparency, and measurable outcomes.
@@ -314,7 +342,7 @@ export default function HomePage() {
 
           <div className="grid md:grid-cols-4 gap-8 max-w-7xl mx-auto">
             <div className="text-center group">
-              <div className="w-24 h-24 bg-gradient-to-br from-primary to-primary/70 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+              <div className="w-24 h-24 bg-muted border border-muted-foreground/20 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
                 <span className="text-white font-bold text-2xl">1</span>
               </div>
               <h3 className="text-xl font-bold mb-4 text-foreground">Register & Verify</h3>
@@ -324,7 +352,7 @@ export default function HomePage() {
             </div>
 
             <div className="text-center group">
-              <div className="w-24 h-24 bg-gradient-to-br from-accent to-accent/70 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+              <div className="w-24 h-24 bg-muted border border-muted-foreground/20 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
                 <span className="text-white font-bold text-2xl">2</span>
               </div>
               <h3 className="text-xl font-bold mb-4 text-foreground">Create Programs</h3>
@@ -334,7 +362,7 @@ export default function HomePage() {
             </div>
 
             <div className="text-center group">
-              <div className="w-24 h-24 bg-gradient-to-br from-chart-3 to-chart-3/70 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+              <div className="w-24 h-24 bg-muted border border-muted-foreground/20 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
                 <span className="text-white font-bold text-2xl">3</span>
               </div>
               <h3 className="text-xl font-bold mb-4 text-foreground">Track Progress</h3>
@@ -344,7 +372,7 @@ export default function HomePage() {
             </div>
 
             <div className="text-center group">
-              <div className="w-24 h-24 bg-gradient-to-br from-chart-4 to-chart-4/70 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+              <div className="w-24 h-24 bg-muted border border-muted-foreground/20 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
                 <span className="text-white font-bold text-2xl">4</span>
               </div>
               <h3 className="text-xl font-bold mb-4 text-foreground">Achieve Placements</h3>
@@ -360,8 +388,8 @@ export default function HomePage() {
       <section className="py-32">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
-            <h2 className="text-5xl md:text-6xl font-bold mb-8 text-foreground">
-              Training <span className="gradient-text">Programs</span>
+            <h2 className="text-5xl md:text-6xl font-bold mb-8 text-foreground" style={{ fontFamily: 'var(--font-instrument-sans)' }}>
+              Training <span className="text-foreground/80">Programs</span>
             </h2>
             <p className="text-2xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
               Comprehensive skill development programs across diverse sectors and industries.
@@ -404,11 +432,11 @@ export default function HomePage() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-32 bg-gradient-to-r from-primary via-primary/90 to-accent text-white relative overflow-hidden">
+      <section className="py-32 bg-muted text-foreground relative overflow-hidden">
         <div className="absolute inset-0 bg-black/10"></div>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-20">
-            <h2 className="text-5xl md:text-6xl font-bold mb-8">Transforming Lives Across India</h2>
+            <h2 className="text-5xl md:text-6xl font-bold mb-8" style={{ fontFamily: 'var(--font-instrument-sans)' }}>Transforming Lives Across India</h2>
             <p className="text-2xl opacity-90 max-w-3xl mx-auto leading-relaxed">
               Real impact, measurable results, sustainable growth
             </p>
@@ -447,8 +475,8 @@ export default function HomePage() {
       <section className="py-32">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
-            <h2 className="text-5xl md:text-6xl font-bold mb-8 text-foreground">
-              Powered by <span className="gradient-text">Advanced Technology</span>
+            <h2 className="text-5xl md:text-6xl font-bold mb-8 text-foreground" style={{ fontFamily: 'var(--font-instrument-sans)' }}>
+              Powered by <span className="text-foreground/80">Advanced Technology</span>
             </h2>
             <p className="text-2xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
               Cutting-edge solutions that ensure scalability, security, and seamless user experience.
@@ -493,8 +521,8 @@ export default function HomePage() {
       <section className="py-32 bg-muted/30">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
-            <h2 className="text-5xl md:text-6xl font-bold mb-8 text-foreground">
-              What Our <span className="gradient-text">Partners</span> Say
+            <h2 className="text-5xl md:text-6xl font-bold mb-8 text-foreground" style={{ fontFamily: 'var(--font-instrument-sans)' }}>
+              What Our <span className="text-foreground/80">Partners</span> Say
             </h2>
             <p className="text-2xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
               Success stories from training partners and students across India.
@@ -505,7 +533,7 @@ export default function HomePage() {
             <Card className="group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-3 border-0 bg-card/80 backdrop-blur-sm p-8">
               <CardHeader>
                 <div className="flex items-center mb-6">
-                  <div className="w-16 h-16 bg-gradient-to-br from-primary to-primary/70 rounded-full flex items-center justify-center mr-4">
+                  <div className="w-16 h-16 bg-muted border border-muted-foreground/20 rounded-full flex items-center justify-center mr-4">
                     <Building2 className="h-8 w-8 text-white" />
                   </div>
                   <div>
@@ -523,7 +551,7 @@ export default function HomePage() {
             <Card className="group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-3 border-0 bg-card/80 backdrop-blur-sm p-8">
               <CardHeader>
                 <div className="flex items-center mb-6">
-                  <div className="w-16 h-16 bg-gradient-to-br from-accent to-accent/70 rounded-full flex items-center justify-center mr-4">
+                  <div className="w-16 h-16 bg-muted border border-muted-foreground/20 rounded-full flex items-center justify-center mr-4">
                     <GraduationCap className="h-8 w-8 text-white" />
                   </div>
                   <div>
@@ -541,7 +569,7 @@ export default function HomePage() {
             <Card className="group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-3 border-0 bg-card/80 backdrop-blur-sm p-8">
               <CardHeader>
                 <div className="flex items-center mb-6">
-                  <div className="w-16 h-16 bg-gradient-to-br from-chart-3 to-chart-3/70 rounded-full flex items-center justify-center mr-4">
+                  <div className="w-16 h-16 bg-muted border border-muted-foreground/20 rounded-full flex items-center justify-center mr-4">
                     <Briefcase className="h-8 w-8 text-white" />
                   </div>
                   <div>
@@ -563,8 +591,8 @@ export default function HomePage() {
       <section className="py-32">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
-            <h2 className="text-5xl md:text-6xl font-bold mb-8 text-foreground">
-              <span className="gradient-text">Pan-India</span> Presence
+            <h2 className="text-5xl md:text-6xl font-bold mb-8 text-foreground" style={{ fontFamily: 'var(--font-instrument-sans)' }}>
+              <span className="text-foreground/80">Pan-India</span> Presence
             </h2>
             <p className="text-2xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
               Serving communities across all states and union territories with localized support.
@@ -600,8 +628,8 @@ export default function HomePage() {
       <section className="py-32 bg-muted/30">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
-            <h2 className="text-5xl md:text-6xl font-bold mb-8 text-foreground">
-              Comprehensive <span className="gradient-text">Support</span>
+            <h2 className="text-5xl md:text-6xl font-bold mb-8 text-foreground" style={{ fontFamily: 'var(--font-instrument-sans)' }}>
+              Comprehensive <span className="text-foreground/80">Support</span>
             </h2>
             <p className="text-2xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
               Dedicated assistance every step of the way, from onboarding to ongoing operations.
@@ -646,8 +674,8 @@ export default function HomePage() {
       <section className="py-32">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
-            <h2 className="text-5xl md:text-6xl font-bold mb-8 text-foreground">
-              Seamless <span className="gradient-text">Integrations</span>
+            <h2 className="text-5xl md:text-6xl font-bold mb-8 text-foreground" style={{ fontFamily: 'var(--font-instrument-sans)' }}>
+              Seamless <span className="text-foreground/80">Integrations</span>
             </h2>
             <p className="text-2xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
               Connect with existing systems and third-party services for enhanced functionality.
@@ -680,10 +708,10 @@ export default function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-32 bg-gradient-to-r from-primary via-primary/90 to-accent text-white relative overflow-hidden">
+      <section className="py-32 bg-muted text-foreground relative overflow-hidden">
         <div className="absolute inset-0 bg-black/10"></div>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center max-w-5xl relative z-10">
-          <h2 className="text-5xl md:text-6xl font-bold mb-8">
+          <h2 className="text-5xl md:text-6xl font-bold mb-8" style={{ fontFamily: 'var(--font-instrument-sans)' }}>
             Ready to Transform <span className="text-white/90">Skill Development?</span>
           </h2>
           <p className="text-2xl opacity-90 mb-16 leading-relaxed max-w-4xl mx-auto">

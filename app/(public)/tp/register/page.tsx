@@ -1,3 +1,6 @@
+"use client"
+
+import { useState } from "react"
 import { PublicLayout } from "@/components/public-layout"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -7,10 +10,27 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Badge } from "@/components/ui/badge"
+import { GSTVerificationInput } from "@/components/ui/gst-verification-input"
+import { AddressForm } from "@/components/ui/address-autocomplete"
 import Link from "next/link"
 import { FileText, Shield, Clock, CheckCircle, Upload, ArrowRight, AlertCircle } from "lucide-react"
 
 export default function TPRegisterPage() {
+  const [formData, setFormData] = useState({
+    gstNumber: "",
+    gstVerified: false,
+    companyName: "",
+    address: "",
+    city: "",
+    state: "",
+    pincode: "",
+    // Add other form fields as needed
+  })
+
+  const updateFormData = (field: string, value: any) => {
+    setFormData(prev => ({ ...prev, [field]: value }))
+  }
+
   return (
     <PublicLayout>
       {/* Hero Section */}
@@ -123,8 +143,20 @@ export default function TPRegisterPage() {
                       <Input id="incorporation-year" type="number" placeholder="YYYY" />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="gst-number">GST Number *</Label>
-                      <Input id="gst-number" placeholder="Enter GST number" />
+                      <GSTVerificationInput
+                        label="GST Number"
+                        placeholder="Enter GST number"
+                        value={formData.gstNumber}
+                        onChange={(value, verificationData) => {
+                          updateFormData("gstNumber", value)
+                          if (verificationData) {
+                            updateFormData("gstVerified", true)
+                            updateFormData("companyName", verificationData.lgnm)
+                          }
+                        }}
+                        id="gst-number"
+                        required
+                      />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="pan-number">PAN Number *</Label>
@@ -171,60 +203,23 @@ export default function TPRegisterPage() {
                 {/* Address Details */}
                 <div>
                   <h3 className="text-lg font-semibold mb-4">Address Details</h3>
-                  <div className="space-y-6">
-                    <div className="space-y-2">
-                      <Label htmlFor="address">Complete Address *</Label>
-                      <Textarea id="address" placeholder="Enter complete address" rows={3} />
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                      <div className="space-y-2">
-                        <Label htmlFor="city">City *</Label>
-                        <Input id="city" placeholder="Enter city" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="state">State *</Label>
-                        <Select>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select state" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="andhra-pradesh">Andhra Pradesh</SelectItem>
-                            <SelectItem value="arunachal-pradesh">Arunachal Pradesh</SelectItem>
-                            <SelectItem value="assam">Assam</SelectItem>
-                            <SelectItem value="bihar">Bihar</SelectItem>
-                            <SelectItem value="chhattisgarh">Chhattisgarh</SelectItem>
-                            <SelectItem value="goa">Goa</SelectItem>
-                            <SelectItem value="gujarat">Gujarat</SelectItem>
-                            <SelectItem value="haryana">Haryana</SelectItem>
-                            <SelectItem value="himachal-pradesh">Himachal Pradesh</SelectItem>
-                            <SelectItem value="jharkhand">Jharkhand</SelectItem>
-                            <SelectItem value="karnataka">Karnataka</SelectItem>
-                            <SelectItem value="kerala">Kerala</SelectItem>
-                            <SelectItem value="madhya-pradesh">Madhya Pradesh</SelectItem>
-                            <SelectItem value="maharashtra">Maharashtra</SelectItem>
-                            <SelectItem value="manipur">Manipur</SelectItem>
-                            <SelectItem value="meghalaya">Meghalaya</SelectItem>
-                            <SelectItem value="mizoram">Mizoram</SelectItem>
-                            <SelectItem value="nagaland">Nagaland</SelectItem>
-                            <SelectItem value="odisha">Odisha</SelectItem>
-                            <SelectItem value="punjab">Punjab</SelectItem>
-                            <SelectItem value="rajasthan">Rajasthan</SelectItem>
-                            <SelectItem value="sikkim">Sikkim</SelectItem>
-                            <SelectItem value="tamil-nadu">Tamil Nadu</SelectItem>
-                            <SelectItem value="telangana">Telangana</SelectItem>
-                            <SelectItem value="tripura">Tripura</SelectItem>
-                            <SelectItem value="uttar-pradesh">Uttar Pradesh</SelectItem>
-                            <SelectItem value="uttarakhand">Uttarakhand</SelectItem>
-                            <SelectItem value="west-bengal">West Bengal</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="pincode">PIN Code *</Label>
-                        <Input id="pincode" placeholder="Enter PIN code" />
-                      </div>
-                    </div>
-                  </div>
+                  <AddressForm
+                    onAddressChange={(address) => {
+                      updateFormData("address", address.fullAddress)
+                      updateFormData("city", address.city)
+                      updateFormData("state", address.state)
+                      updateFormData("pincode", address.pincode)
+                    }}
+                    initialAddress={{
+                      fullAddress: formData.address,
+                      city: formData.city,
+                      state: formData.state,
+                      pincode: formData.pincode,
+                      street: "",
+                      country: "India"
+                    }}
+                    required
+                  />
                 </div>
 
                 {/* Training Capabilities */}

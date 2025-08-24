@@ -9,6 +9,8 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/components/ui/use-toast"
 import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb"
+import { GSTVerificationInput } from "@/components/ui/gst-verification-input"
+import { AddressAutocomplete } from "@/components/ui/address-autocomplete"
 import { 
   ArrowLeft, 
   Building2, 
@@ -223,11 +225,21 @@ export default function EditTrainingPartnerPage({ params }: Props) {
                 />
               </div>
               <div>
-                <Label htmlFor="gstNumber">GST Number</Label>
-                <Input 
-                  id="gstNumber"
+                <GSTVerificationInput
+                  label="GST Number"
                   value={formData.gstNumber}
-                  onChange={(e) => handleInputChange('gstNumber', e.target.value)}
+                  onChange={(value, verificationData) => {
+                    handleInputChange('gstNumber', value)
+                    // Store verification data if needed
+                    if (verificationData) {
+                      handleInputChange('gstVerified', true)
+                      // Optionally update organization name with verified data
+                      if (verificationData.lgnm && !formData.organizationName) {
+                        handleInputChange('organizationName', verificationData.lgnm)
+                      }
+                    }
+                  }}
+                  id="gstNumber"
                 />
               </div>
               <div>
@@ -273,12 +285,14 @@ export default function EditTrainingPartnerPage({ params }: Props) {
                 />
               </div>
               <div className="md:col-span-2">
-                <Label htmlFor="address">Address</Label>
-                <Textarea 
-                  id="address"
-                  value={formData.address}
-                  onChange={(e) => handleInputChange('address', e.target.value)}
-                  rows={3}
+                <AddressAutocomplete
+                  label="Address"
+                  placeholder="Start typing address..."
+                  fullAddress={formData.address}
+                  onAddressSelect={(addressComponents) => {
+                    handleInputChange('address', addressComponents.fullAddress)
+                  }}
+                  required
                 />
               </div>
             </CardContent>

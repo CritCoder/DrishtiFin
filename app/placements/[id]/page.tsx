@@ -161,6 +161,7 @@ startxref
   }
 
   const handleEditToggle = () => {
+    console.log('Edit button clicked, isEditing:', isEditing)
     if (!isEditing) {
       setEditData({
         status: placement.status,
@@ -170,6 +171,7 @@ startxref
       })
     }
     setIsEditing(!isEditing)
+    console.log('New isEditing state:', !isEditing)
   }
 
   const handleSaveEdit = () => {
@@ -205,17 +207,9 @@ startxref
 
       {/* Header */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <Link href="/placements">
-            <Button variant="outline" size="sm">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Placements
-            </Button>
-          </Link>
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">{placement.student.name}</h1>
-            <p className="text-gray-600">{placement.job.title} at {placement.company.name}</p>
-          </div>
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">{placement.student.name}</h1>
+          <p className="text-gray-600">{placement.job.title} at {placement.company.name}</p>
         </div>
         <div className="flex items-center gap-3">
           <Badge className={getStatusColor(isEditing ? editData.status || placement.status : placement.status)}>

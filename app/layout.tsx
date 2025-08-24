@@ -1,6 +1,6 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Geist } from "next/font/google"
+import { Geist, Instrument_Sans } from "next/font/google"
 import "./globals.css"
 import { AuthProvider } from "@/lib/auth"
 // import { NextAuthProvider } from "@/lib/next-auth"
@@ -12,6 +12,13 @@ const geist = Geist({
   display: "swap",
   variable: "--font-geist",
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+})
+
+const instrumentSans = Instrument_Sans({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-instrument-sans",
+  weight: ["400", "500", "600", "700"],
 })
 
 export const metadata: Metadata = {
@@ -26,7 +33,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${geist.variable} antialiased`}>
+    <html lang="en" className={`${geist.variable} ${instrumentSans.variable} antialiased`}>
       <body className="font-sans">
         {/* <NextAuthProvider> */}
           <AuthProvider>

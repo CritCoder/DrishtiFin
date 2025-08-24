@@ -165,6 +165,15 @@ export default function IntegrationsPage() {
                             Connect
                           </Button>
                         )}
+                        {integration.id === "gstn" && integration.status === "connected" && (
+                          <Button 
+                            size="sm"
+                            onClick={() => window.location.href = '/integrations/gstn'}
+                          >
+                            <Shield className="w-3 h-3 mr-1" />
+                            Verify Now
+                          </Button>
+                        )}
                       </div>
                     </div>
                   </CardContent>

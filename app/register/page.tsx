@@ -12,6 +12,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import { GSTVerificationInput } from "@/components/ui/gst-verification-input"
+import { AddressForm } from "@/components/ui/address-autocomplete"
 import {
   ArrowLeft,
   Building,
@@ -607,15 +609,20 @@ export default function RegisterPage() {
                     <h3 className="text-lg font-medium">Organization Details</h3>
                     <div className="grid md:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label htmlFor="gst" className="text-sm font-medium">
-                          GST Number
-                        </Label>
-                        <Input
-                          id="gst"
-                          className="h-10 border-input bg-background"
-                          value={formData.gstNumber}
-                          onChange={(e) => updateFormData("gstNumber", e.target.value)}
+                        <GSTVerificationInput
+                          label="GST Number"
                           placeholder="27AARFR5953J1ZF"
+                          value={formData.gstNumber}
+                          onChange={(value, verificationData) => {
+                            updateFormData("gstNumber", value)
+                            // Store verification data if needed
+                            if (verificationData) {
+                              updateFormData("gstVerified", true)
+                              updateFormData("companyName", verificationData.lgnm)
+                            }
+                          }}
+                          id="gst"
+                          required
                         />
                       </div>
                       <div className="space-y-2">
@@ -688,53 +695,23 @@ export default function RegisterPage() {
               <div className="space-y-6">
                 <div className="space-y-4">
                   <h3 className="text-lg font-medium">Address Information</h3>
-                  <div className="space-y-2">
-                    <Label htmlFor="address" className="text-sm font-medium">
-                      Complete Address
-                    </Label>
-                    <Textarea
-                      id="address"
-                      value={formData.address}
-                      onChange={(e) => updateFormData("address", e.target.value)}
-                      rows={3}
-                      className="resize-none border-input bg-background"
-                    />
-                  </div>
-                  <div className="grid md:grid-cols-3 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="city" className="text-sm font-medium">
-                        City
-                      </Label>
-                      <Input
-                        id="city"
-                        className="h-10 border-input bg-background"
-                        value={formData.city}
-                        onChange={(e) => updateFormData("city", e.target.value)}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="state" className="text-sm font-medium">
-                        State
-                      </Label>
-                      <Input
-                        id="state"
-                        className="h-10 border-input bg-background"
-                        value={formData.state}
-                        onChange={(e) => updateFormData("state", e.target.value)}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="pincode" className="text-sm font-medium">
-                        PIN Code
-                      </Label>
-                      <Input
-                        id="pincode"
-                        className="h-10 border-input bg-background"
-                        value={formData.pincode}
-                        onChange={(e) => updateFormData("pincode", e.target.value)}
-                      />
-                    </div>
-                  </div>
+                  <AddressForm
+                    onAddressChange={(address) => {
+                      updateFormData("address", address.fullAddress)
+                      updateFormData("city", address.city)
+                      updateFormData("state", address.state)
+                      updateFormData("pincode", address.pincode)
+                    }}
+                    initialAddress={{
+                      fullAddress: formData.address,
+                      city: formData.city,
+                      state: formData.state,
+                      pincode: formData.pincode,
+                      street: "",
+                      country: "India"
+                    }}
+                    required
+                  />
                 </div>
 
                 <div className="flex justify-between">

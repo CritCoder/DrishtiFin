@@ -15,95 +15,95 @@ export function PublicLayout({ children }: PublicLayoutProps) {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <header className="absolute top-0 z-50 w-full">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex h-16 items-center justify-between">
           <div className="flex items-center space-x-4">
             <Link href="/" className="flex items-center space-x-2">
-              <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-lg">D</span>
+              <div className="h-8 w-8 rounded-lg bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30">
+                <span className="text-white font-bold text-lg">D</span>
               </div>
-              <span className="font-bold text-xl">DRISHTI</span>
+              <span className="font-bold text-xl text-white">DRISHTI</span>
             </Link>
           </div>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-6">
-            <Link href="/about" className="text-sm font-medium hover:text-primary transition-colors">
+            <Link href="/about" className="text-sm font-medium text-white/90 hover:text-white transition-colors">
               About
             </Link>
             <div className="relative group">
-              <button className="flex items-center text-sm font-medium hover:text-primary transition-colors">
+              <button className="flex items-center text-sm font-medium text-white/90 hover:text-white transition-colors">
                 How It Works <ChevronDown className="ml-1 h-4 w-4" />
               </button>
-              <div className="absolute top-full left-0 mt-2 w-48 bg-popover border rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
-                <Link href="/how-it-works/training-partners" className="block px-4 py-2 text-sm hover:bg-muted">
+              <div className="absolute top-full left-0 mt-2 w-48 bg-black/80 backdrop-blur-md border border-white/20 rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+                <Link href="/how-it-works/training-partners" className="block px-4 py-2 text-sm text-white hover:bg-white/10">
                   Training Partners
                 </Link>
-                <Link href="/how-it-works/students" className="block px-4 py-2 text-sm hover:bg-muted">
+                <Link href="/how-it-works/students" className="block px-4 py-2 text-sm text-white hover:bg-white/10">
                   Students
                 </Link>
-                <Link href="/how-it-works/employers" className="block px-4 py-2 text-sm hover:bg-muted">
+                <Link href="/how-it-works/employers" className="block px-4 py-2 text-sm text-white hover:bg-white/10">
                   Employers
                 </Link>
               </div>
             </div>
-            <Link href="/programs" className="text-sm font-medium hover:text-primary transition-colors">
+            <Link href="/programs" className="text-sm font-medium text-white/90 hover:text-white transition-colors">
               Programs
             </Link>
-            <Link href="/employers" className="text-sm font-medium hover:text-primary transition-colors">
+            <Link href="/employers" className="text-sm font-medium text-white/90 hover:text-white transition-colors">
               Employers
             </Link>
-            <Link href="/news" className="text-sm font-medium hover:text-primary transition-colors">
+            <Link href="/news" className="text-sm font-medium text-white/90 hover:text-white transition-colors">
               News
             </Link>
-            <Link href="/help" className="text-sm font-medium hover:text-primary transition-colors">
+            <Link href="/help" className="text-sm font-medium text-white/90 hover:text-white transition-colors">
               Help
             </Link>
           </nav>
 
           {/* CTA Buttons */}
           <div className="hidden md:flex items-center space-x-4">
-            <Button variant="outline" asChild>
+            <Button variant="outline" className="border-white/30 text-white hover:bg-white/10 bg-transparent backdrop-blur-sm" asChild>
               <Link href="/tp/register">Register as TP</Link>
             </Button>
-            <Button asChild>
+            <Button className="bg-white/20 backdrop-blur-sm border border-white/30 text-white hover:bg-white/30" asChild>
               <Link href="/login">Sign In</Link>
             </Button>
           </div>
 
           {/* Mobile Menu Button */}
-          <button className="md:hidden" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+          <button className="md:hidden text-white" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
             {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
         </div>
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden border-t bg-background">
+          <div className="md:hidden bg-black/80 backdrop-blur-md border-t border-white/20">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 space-y-4">
-              <Link href="/about" className="block text-sm font-medium">
+              <Link href="/about" className="block text-sm font-medium text-white">
                 About
               </Link>
-              <Link href="/how-it-works" className="block text-sm font-medium">
+              <Link href="/how-it-works" className="block text-sm font-medium text-white">
                 How It Works
               </Link>
-              <Link href="/programs" className="block text-sm font-medium">
+              <Link href="/programs" className="block text-sm font-medium text-white">
                 Programs
               </Link>
-              <Link href="/employers" className="block text-sm font-medium">
+              <Link href="/employers" className="block text-sm font-medium text-white">
                 Employers
               </Link>
-              <Link href="/news" className="block text-sm font-medium">
+              <Link href="/news" className="block text-sm font-medium text-white">
                 News
               </Link>
-              <Link href="/help" className="block text-sm font-medium">
+              <Link href="/help" className="block text-sm font-medium text-white">
                 Help
               </Link>
               <div className="pt-4 space-y-2">
-                <Button variant="outline" className="w-full bg-transparent" asChild>
+                <Button variant="outline" className="w-full bg-transparent border-white/30 text-white hover:bg-white/10" asChild>
                   <Link href="/tp/register">Register as TP</Link>
                 </Button>
-                <Button className="w-full" asChild>
+                <Button className="w-full bg-white/20 border border-white/30 text-white hover:bg-white/30" asChild>
                   <Link href="/login">Sign In</Link>
                 </Button>
               </div>
