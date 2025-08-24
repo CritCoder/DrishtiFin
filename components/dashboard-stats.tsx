@@ -3,8 +3,9 @@
 import type React from "react"
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { TrendingUp, TrendingDown, Users, GraduationCap, Briefcase, CreditCard } from "lucide-react"
+import { TrendingUp, TrendingDown, Users, GraduationCap, Briefcase, CreditCard, Loader2 } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { useDashboardStats } from "@/hooks/use-dashboard-stats"
 
 interface StatCardProps {
   title: string
@@ -43,41 +44,58 @@ function StatCard({ title, value, change, changeType, icon: Icon }: StatCardProp
 }
 
 export function DashboardStats() {
-  const stats = [
-    {
-      title: "Active Training Partners",
-      value: "1,247",
-      change: "+12.5%",
-      changeType: "positive" as const,
-      icon: Users,
-    },
-    {
-      title: "Running Batches",
-      value: "3,456",
-      change: "+8.2%",
-      changeType: "positive" as const,
-      icon: GraduationCap,
-    },
-    {
-      title: "Successful Placements",
-      value: "28,934",
-      change: "+15.3%",
-      changeType: "positive" as const,
-      icon: Briefcase,
-    },
-    {
-      title: "Pending Payments",
-      value: "₹45.2L",
-      change: "-3.1%",
-      changeType: "negative" as const,
-      icon: CreditCard,
-    },
-  ]
+  const { stats, loading, error } = useDashboardStats()
+
+  const iconMap: Record<string, React.ElementType> = {
+    Users,
+    GraduationCap, 
+    Briefcase,
+    CreditCard,
+  }
+
+  if (loading) {
+    return (
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        {[...Array(4)].map((_, index) => (
+          <Card key={index}>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <div className="h-4 w-24 bg-muted animate-pulse rounded"></div>
+              <div className="h-4 w-4 bg-muted animate-pulse rounded"></div>
+            </CardHeader>
+            <CardContent>
+              <div className="h-8 w-16 bg-muted animate-pulse rounded mb-2"></div>
+              <div className="h-4 w-20 bg-muted animate-pulse rounded"></div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <Card className="col-span-full">
+          <CardContent className="pt-6">
+            <div className="text-center text-muted-foreground">
+              <Loader2 className="h-6 w-6 animate-spin mx-auto mb-2" />
+              <p>Failed to load dashboard stats</p>
+              <p className="text-sm">{error}</p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       {stats.map((stat) => (
-        <StatCard key={stat.title} {...stat} />
+        <StatCard 
+          key={stat.title} 
+          {...stat} 
+          icon={iconMap[stat.icon] || Users}
+        />
       ))}
     </div>
   )
