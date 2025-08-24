@@ -10,13 +10,14 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+  DrawerClose,
+} from "@/components/ui/drawer"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Eye, EyeOff, Shield, Users, GraduationCap, FileCheck, User, Info } from "lucide-react"
 
@@ -86,7 +87,7 @@ export default function LoginPage() {
   const [credentials, setCredentials] = useState({ username: "", password: "" })
   const [error, setError] = useState("")
   const { showNotification, NotificationComponent } = useNotificationModal()
-  const [showDemoModal, setShowDemoModal] = useState(false)
+  const [showDemoDrawer, setShowDemoDrawer] = useState(false)
 
   const selectedRoleData = userRoles.find((role) => role.id === selectedRole)
 
@@ -112,7 +113,7 @@ export default function LoginPage() {
       setSelectedSubtype("")
     }
     fillDemoCredentials(roleId, subtypeId)
-    setShowDemoModal(false)
+    setShowDemoDrawer(false)
   }
 
   const handleRoleChange = (roleId: string) => {
@@ -233,44 +234,47 @@ export default function LoginPage() {
               </h1>
               <p className="text-muted-foreground text-lg mb-4">Please enter your details to sign in</p>
 
-              <Dialog open={showDemoModal} onOpenChange={setShowDemoModal}>
-                <DialogTrigger asChild>
+              <Drawer open={showDemoDrawer} onOpenChange={setShowDemoDrawer} direction="right">
+                <DrawerTrigger asChild>
                   <Button
                     variant="ghost"
                     size="sm"
                     className="mt-2 text-muted-foreground hover:text-accent hover:bg-accent/10 transition-colors"
-                    onClick={() => setShowDemoModal(true)}
+                    onClick={() => setShowDemoDrawer(true)}
                   >
                     <Info className="w-4 h-4 mr-2" />
                     View Demo Credentials
                   </Button>
-                </DialogTrigger>
-                <DialogContent className="max-w-7xl max-h-[90vh] overflow-y-auto">
-                  <DialogHeader className="text-center pb-6">
-                    <DialogTitle className="font-serif text-2xl text-gray-900">Demo Login Credentials</DialogTitle>
-                    <DialogDescription className="text-base text-gray-600">
-                      Click any credential card below to instantly login and explore different user roles
-                    </DialogDescription>
-                  </DialogHeader>
+                </DrawerTrigger>
+                <DrawerContent className="w-[600px] max-w-[90vw]">
+                  <DrawerHeader className="border-b border-gray-200 pb-4">
+                    <DrawerTitle className="font-serif text-xl text-gray-900 flex items-center gap-2">
+                      <Info className="w-5 h-5 text-blue-600" />
+                      Demo Login Credentials
+                    </DrawerTitle>
+                    <DrawerDescription className="text-sm text-gray-600">
+                      Click any credential below to instantly login and explore different user roles
+                    </DrawerDescription>
+                  </DrawerHeader>
                   
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
+                  <div className="flex-1 overflow-y-auto p-4 space-y-4">
                     {userRoles.map((role) => {
                       const Icon = role.icon
                       return (
-                        <div key={role.id} className="border border-gray-200 rounded-xl bg-white shadow-sm hover:shadow-lg transition-all duration-200 overflow-hidden">
-                          <div className="p-5 border-b border-gray-100 bg-gray-50">
-                            <div className="flex items-start gap-4">
-                              <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl flex items-center justify-center shrink-0">
-                                <Icon className="w-6 h-6 text-blue-700" />
+                        <div key={role.id} className="border border-gray-200 rounded-lg bg-white shadow-sm overflow-hidden">
+                          <div className="p-3 border-b border-gray-100 bg-gray-50">
+                            <div className="flex items-center gap-3">
+                              <div className="w-8 h-8 bg-gradient-to-br from-blue-100 to-blue-200 rounded-lg flex items-center justify-center shrink-0">
+                                <Icon className="w-4 h-4 text-blue-700" />
                               </div>
                               <div className="flex-1 min-w-0">
-                                <h4 className="font-semibold text-lg text-gray-900 mb-1">{role.title}</h4>
-                                <p className="text-sm text-gray-600 leading-relaxed">{role.description}</p>
+                                <h4 className="font-semibold text-sm text-gray-900">{role.title}</h4>
+                                <p className="text-xs text-gray-600 leading-tight">{role.description}</p>
                               </div>
                             </div>
                           </div>
                           
-                          <div className="p-5 space-y-4">
+                          <div className="p-3 space-y-2">
                             {role.subtypes.length > 0 ? (
                               role.subtypes.map((subtype) => {
                                 const creds = (demoCredentials[role.id as keyof typeof demoCredentials] as any)?.[subtype.id]
@@ -278,22 +282,22 @@ export default function LoginPage() {
                                   <button
                                     key={subtype.id}
                                     onClick={() => selectDemoAccount(role.id, subtype.id)}
-                                    className="w-full text-left p-4 bg-gradient-to-r from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200 rounded-lg border border-blue-200 hover:border-blue-300 transition-all group hover:scale-[1.02]"
+                                    className="w-full text-left p-3 bg-gradient-to-r from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200 rounded-lg border border-blue-200 hover:border-blue-300 transition-all group"
                                   >
-                                    <div className="flex items-center justify-between mb-3">
-                                      <span className="font-semibold text-base text-blue-900">{subtype.title}</span>
-                                      <span className="text-sm text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity font-medium">Click to login →</span>
+                                    <div className="flex items-center justify-between mb-2">
+                                      <span className="font-medium text-xs text-blue-900">{subtype.title}</span>
+                                      <span className="text-xs text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity">Click →</span>
                                     </div>
-                                    <div className="space-y-2">
-                                      <p className="text-xs text-blue-700 mb-2">{subtype.description}</p>
-                                      <div className="text-sm text-blue-800 font-mono space-y-1">
+                                    <div className="space-y-1">
+                                      <p className="text-xs text-blue-700">{subtype.description}</p>
+                                      <div className="text-xs text-blue-800 font-mono space-y-1">
                                         <div className="flex items-center gap-2">
                                           <span className="text-blue-600">📧</span>
-                                          <span className="truncate">{creds?.username}</span>
+                                          <span className="truncate text-xs">{creds?.username}</span>
                                         </div>
                                         <div className="flex items-center gap-2">
                                           <span className="text-blue-600">🔐</span>
-                                          <span className="truncate">{creds?.password}</span>
+                                          <span className="truncate text-xs">{creds?.password}</span>
                                         </div>
                                       </div>
                                     </div>
@@ -303,21 +307,21 @@ export default function LoginPage() {
                             ) : (
                               <button
                                 onClick={() => selectDemoAccount(role.id)}
-                                className="w-full text-left p-4 bg-gradient-to-r from-green-50 to-green-100 hover:from-green-100 hover:to-green-200 rounded-lg border border-green-200 hover:border-green-300 transition-all group hover:scale-[1.02]"
+                                className="w-full text-left p-3 bg-gradient-to-r from-green-50 to-green-100 hover:from-green-100 hover:to-green-200 rounded-lg border border-green-200 hover:border-green-300 transition-all group"
                               >
-                                <div className="flex items-center justify-between mb-3">
-                                  <span className="font-semibold text-base text-green-900">Direct Access</span>
-                                  <span className="text-sm text-green-600 opacity-0 group-hover:opacity-100 transition-opacity font-medium">Click to login →</span>
+                                <div className="flex items-center justify-between mb-2">
+                                  <span className="font-medium text-xs text-green-900">Direct Access</span>
+                                  <span className="text-xs text-green-600 opacity-0 group-hover:opacity-100 transition-opacity">Click →</span>
                                 </div>
-                                <div className="space-y-2">
-                                  <div className="text-sm text-green-800 font-mono space-y-1">
+                                <div className="space-y-1">
+                                  <div className="text-xs text-green-800 font-mono space-y-1">
                                     <div className="flex items-center gap-2">
                                       <span className="text-green-600">📧</span>
-                                      <span className="truncate">{(demoCredentials[role.id as keyof typeof demoCredentials] as any)?.username}</span>
+                                      <span className="truncate text-xs">{(demoCredentials[role.id as keyof typeof demoCredentials] as any)?.username}</span>
                                     </div>
                                     <div className="flex items-center gap-2">
                                       <span className="text-green-600">🔐</span>
-                                      <span className="truncate">{(demoCredentials[role.id as keyof typeof demoCredentials] as any)?.password}</span>
+                                      <span className="truncate text-xs">{(demoCredentials[role.id as keyof typeof demoCredentials] as any)?.password}</span>
                                     </div>
                                   </div>
                                 </div>
@@ -329,22 +333,21 @@ export default function LoginPage() {
                     })}
                   </div>
                   
-                  <div className="mt-8 p-6 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-xl">
-                    <div className="flex items-start gap-4">
-                      <div className="w-8 h-8 bg-amber-200 rounded-full flex items-center justify-center flex-shrink-0">
-                        <Info className="w-5 h-5 text-amber-700" />
+                  <div className="p-4 border-t border-gray-200 bg-gradient-to-r from-amber-50 to-orange-50">
+                    <div className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-amber-200 rounded-full flex items-center justify-center flex-shrink-0">
+                        <Info className="w-3 h-3 text-amber-700" />
                       </div>
                       <div className="flex-1">
-                        <h5 className="font-semibold text-amber-900 mb-2 text-lg">Demo Environment</h5>
-                        <p className="text-base text-amber-800 leading-relaxed">
-                          These are demo accounts with pre-populated data. Each role has different permissions and access levels. 
-                          Click any credential card above to automatically fill the login form and experience the platform.
+                        <h5 className="font-semibold text-amber-900 text-sm mb-1">Demo Environment</h5>
+                        <p className="text-xs text-amber-800 leading-relaxed">
+                          These are demo accounts with pre-populated data. Each role has different permissions and access levels.
                         </p>
                       </div>
                     </div>
                   </div>
-                </DialogContent>
-              </Dialog>
+                </DrawerContent>
+              </Drawer>
             </div>
 
             <div className="space-y-3 mb-6">

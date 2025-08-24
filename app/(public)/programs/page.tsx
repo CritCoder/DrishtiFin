@@ -11,11 +11,11 @@ export default function ProgramsPage() {
   return (
     <PublicLayout>
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-br from-primary/5 to-secondary/5">
+      <section className="py-16 bg-gradient-to-br from-primary/5 to-secondary/5">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">Training Programs</h1>
-            <p className="text-xl text-muted-foreground mb-8">
+            <h1 className="text-hero gradient-text mb-4">Training Programs</h1>
+            <p className="text-subheading text-muted-foreground">
               Discover government-backed skill development programs designed to prepare you for in-demand careers.
             </p>
           </div>
@@ -23,7 +23,7 @@ export default function ProgramsPage() {
       </section>
 
       {/* Search & Filters */}
-      <section className="py-12 bg-muted/50">
+      <section className="py-8 bg-muted/50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -61,16 +61,16 @@ export default function ProgramsPage() {
       </section>
 
       {/* Featured Programs */}
-      <section className="py-20">
+      <section className="py-16">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4">Featured Programs</h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-display mb-4">Featured Programs</h2>
+            <p className="text-subheading text-muted-foreground max-w-2xl mx-auto">
               High-demand programs with excellent placement rates and industry recognition.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <Card className="hover:shadow-lg transition-shadow">
               <CardHeader>
                 <div className="flex justify-between items-start mb-2">
@@ -229,16 +229,16 @@ export default function ProgramsPage() {
       </section>
 
       {/* Program Categories */}
-      <section className="py-20 bg-muted/50">
+      <section className="py-16 bg-muted/50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4">Program Categories</h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-display mb-4">Program Categories</h2>
+            <p className="text-subheading text-muted-foreground max-w-2xl mx-auto">
               Explore programs across various industries and skill levels.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <Card className="hover:shadow-lg transition-shadow cursor-pointer">
               <CardHeader className="text-center">
                 <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -345,41 +345,41 @@ export default function ProgramsPage() {
       </section>
 
       {/* Success Metrics */}
-      <section className="py-20">
+      <section className="py-16">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4">Program Success Metrics</h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-display mb-4">Program Success Metrics</h2>
+            <p className="text-subheading text-muted-foreground max-w-2xl mx-auto">
               Real outcomes from our training programs across India.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="text-center">
-              <div className="text-4xl font-bold text-primary mb-2">50,000+</div>
-              <div className="text-sm text-muted-foreground">Students Trained</div>
+              <div className="text-3xl font-bold text-primary mb-2">50,000+</div>
+              <div className="text-caption text-muted-foreground">Students Trained</div>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold text-primary mb-2">78%</div>
-              <div className="text-sm text-muted-foreground">Average Placement Rate</div>
+              <div className="text-3xl font-bold text-primary mb-2">78%</div>
+              <div className="text-caption text-muted-foreground">Average Placement Rate</div>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold text-primary mb-2">₹4.2L</div>
-              <div className="text-sm text-muted-foreground">Average Starting Salary</div>
+              <div className="text-3xl font-bold text-primary mb-2">₹4.2L</div>
+              <div className="text-caption text-muted-foreground">Average Starting Salary</div>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold text-primary mb-2">95%</div>
-              <div className="text-sm text-muted-foreground">Course Completion Rate</div>
+              <div className="text-3xl font-bold text-primary mb-2">95%</div>
+              <div className="text-caption text-muted-foreground">Course Completion Rate</div>
             </div>
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-primary text-primary-foreground">
+      <section className="py-16 bg-primary text-primary-foreground">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold mb-4">Ready to Start Your Journey?</h2>
-          <p className="text-xl mb-8 opacity-90 max-w-2xl mx-auto">
+          <h2 className="text-display mb-4">Ready to Start Your Journey?</h2>
+          <p className="text-subheading mb-6 opacity-90 max-w-2xl mx-auto">
             Find the perfect training program to advance your career and achieve your professional goals.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

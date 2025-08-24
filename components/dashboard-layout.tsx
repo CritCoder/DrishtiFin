@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { DashboardSidebar } from "@/components/dashboard-sidebar"
+import { DashboardSidebar } from "@/components/dashboard-sidebar-new"
 import { DashboardHeader } from "@/components/dashboard-header"
 import { usePathname } from "next/navigation"
 import { useAuth } from "@/lib/auth"

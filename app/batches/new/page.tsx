@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useRouter } from "next/navigation"
-import { useNotifications } from "@/hooks/use-notifications"
+import { useToast } from "@/components/ui/use-toast"
 import Link from "next/link"
 
 interface BatchFormData {
@@ -26,7 +26,7 @@ interface BatchFormData {
 
 export default function NewBatchPage() {
   const router = useRouter()
-  const { showNotification } = useNotifications()
+  const { toast } = useToast()
   const [formData, setFormData] = useState<BatchFormData>({
     batchName: "",
     trainingPartner: "",
@@ -55,30 +55,48 @@ export default function NewBatchPage() {
     try {
       // Validate required fields
       if (!formData.batchName || !formData.trainingPartner || !formData.program) {
-        showNotification({
-          status: 'error',
+        toast({
+          variant: 'destructive',
           title: 'Validation Error',
-          message: 'Please fill in all required fields'
+          description: 'Please fill in all required fields'
         })
         setIsSubmitting(false)
         return
       }
 
       // Mock API call - replace with actual API endpoint
-      const response = await fetch("/api/batches", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      })
+      // Save to localStorage (simulating API)
+      const newBatch = {
+        id: `BATCH-${new Date().getFullYear()}-${String(Math.floor(Math.random() * 1000)).padStart(3, '0')}`,
+        name: formData.batchName,
+        tp: formData.trainingPartner,
+        status: 'Upcoming',
+        students: parseInt(formData.capacity) || 0,
+        startDate: formData.startDate,
+        endDate: formData.endDate,
+        program: formData.program,
+        instructor: formData.instructor,
+        location: formData.location,
+        description: formData.description,
+        prerequisites: formData.prerequisites
+      }
+
+      // Get existing batches
+      const existingBatches = JSON.parse(localStorage.getItem('drishti_batches') || '[]')
+      
+      // Add new batch
+      existingBatches.unshift(newBatch)
+      
+      // Save back to localStorage
+      localStorage.setItem('drishti_batches', JSON.stringify(existingBatches))
+
+      // Simulate API response
+      const response = { ok: true }
 
       if (response.ok) {
-        showNotification({
-          status: 'success',
+        toast({
           title: 'Success!',
-          message: 'Batch created successfully',
-          showEmailIndicator: true
+          description: 'Batch created successfully',
         })
         router.push("/batches")
       } else {
@@ -86,10 +104,10 @@ export default function NewBatchPage() {
       }
     } catch (error) {
       console.error("Error creating batch:", error)
-      showNotification({
-        status: 'error',
+      toast({
+        variant: 'destructive',
         title: 'Error',
-        message: 'Failed to create batch. Please try again.'
+        description: 'Failed to create batch. Please try again.'
       })
     } finally {
       setIsSubmitting(false)

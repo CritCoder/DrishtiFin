@@ -1,3 +1,5 @@
+"use client"
+
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -36,11 +38,40 @@ export default function PlacementsPage() {
     },
   ]
 
+  const handleExportCSV = () => {
+    const csvData = [
+      ['Student Name', 'Company', 'Position', 'Salary (INR)', 'Status', 'Date'],
+      ...placements.map(p => [
+        p.student,
+        p.company, 
+        p.position,
+        p.salary.toString(),
+        p.status,
+        p.date
+      ])
+    ]
+    
+    const csvContent = csvData.map(row => row.join(',')).join('\n')
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+    const link = document.createElement('a')
+    const url = URL.createObjectURL(blob)
+    link.setAttribute('href', url)
+    link.setAttribute('download', `placements_${new Date().toISOString().slice(0, 10)}.csv`)
+    link.style.visibility = 'hidden'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+
   return (
     <div className="p-6 space-y-6">
-      <div className="flex items-center justify-end">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Job Placements</h1>
+          <p className="text-gray-600">Track student placements and employment verification</p>
+        </div>
         <div className="flex gap-3">
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" onClick={handleExportCSV}>
             <Download className="h-4 w-4 mr-2" />
             Export CSV
           </Button>

@@ -180,7 +180,7 @@ export function DashboardSidebar({ activeItem }: DashboardSidebarProps) {
             <div className="w-8 h-8 bg-sidebar-accent rounded-lg flex items-center justify-center">
               <TrendingUp className="w-5 h-5 text-sidebar-accent-foreground" />
             </div>
-            <Link href="/" className="font-montserrat font-bold text-lg text-sidebar-foreground">
+            <Link href="/app" className="font-montserrat font-bold text-lg text-sidebar-foreground">
               DRISHTI
             </Link>
           </div>
@@ -213,8 +213,8 @@ export function DashboardSidebar({ activeItem }: DashboardSidebarProps) {
                   <Button
                     variant="ghost"
                     className={cn(
-                      "w-full justify-start text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-                      isActive && "bg-sidebar-accent text-sidebar-accent-foreground",
+                      "w-full justify-start text-sidebar-foreground hover:shadow-lg hover:shadow-blue-500/20 hover:bg-sidebar-accent transition-all duration-200",
+                      isActive && "bg-black text-white hover:bg-black hover:shadow-lg hover:shadow-gray-500/30 shadow-md border-l-4 border-gray-400",
                       isCollapsed && "px-2",
                     )}
                   >

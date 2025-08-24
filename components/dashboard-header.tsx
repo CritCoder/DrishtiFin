@@ -1,11 +1,11 @@
 "use client"
 
-import { Bell, Search, ChevronRight, Home } from "lucide-react"
+import { Bell, Search, ChevronRight, Home, Command } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { SpotlightSearch, useSpotlightSearch } from "@/components/spotlight-search"
 
 interface DashboardHeaderProps {
   title?: string
@@ -14,10 +14,11 @@ interface DashboardHeaderProps {
 
 export function DashboardHeader({ title, subtitle }: DashboardHeaderProps) {
   const pathname = usePathname()
+  const { isOpen, open, close } = useSpotlightSearch()
 
   const generateBreadcrumbs = () => {
     const segments = pathname.split("/").filter(Boolean)
-    const breadcrumbs = [{ label: "Dashboard", href: "/" }]
+    const breadcrumbs = [{ label: "Dashboard", href: "/app" }]
 
     let currentPath = ""
     segments.forEach((segment, index) => {
@@ -42,7 +43,7 @@ export function DashboardHeader({ title, subtitle }: DashboardHeaderProps) {
   const breadcrumbs = generateBreadcrumbs()
 
   return (
-    <header className="bg-white border-b border-gray-200 h-16 flex-shrink-0">
+    <header className="bg-sidebar border-b border-sidebar-border h-16 flex-shrink-0">
       <div className="px-6 h-16 flex items-center justify-between">
           {/* Left - Breadcrumbs */}
           <nav className="flex items-center space-x-2 text-sm">
@@ -63,13 +64,18 @@ export function DashboardHeader({ title, subtitle }: DashboardHeaderProps) {
 
           {/* Center - Search */}
           <div className="flex-1 flex justify-center px-8">
-            <div className="relative w-96">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-4 h-4" />
-              <Input
-                placeholder="Search across system..."
-                className="pl-10 w-full bg-white border-slate-300 text-slate-900 placeholder:text-slate-500 focus:border-blue-500"
-              />
-            </div>
+            <Button
+              variant="outline"
+              onClick={open}
+              className="w-96 justify-start text-muted-foreground hover:bg-gray-50 border-gray-300"
+            >
+              <Search className="w-4 h-4 mr-3 text-gray-400" />
+              <span className="flex-1 text-left">Search across system...</span>
+              <div className="flex items-center gap-1 text-xs text-gray-400 ml-3">
+                <Command className="w-3 h-3" />
+                <span>K</span>
+              </div>
+            </Button>
           </div>
 
           {/* Right - Notifications only */}
@@ -84,6 +90,8 @@ export function DashboardHeader({ title, subtitle }: DashboardHeaderProps) {
             </div>
           </div>
       </div>
+      
+      <SpotlightSearch isOpen={isOpen} onClose={close} />
     </header>
   )
 }

@@ -29,6 +29,11 @@ export function ProtectedRoute({
   useEffect(() => {
     console.log("🔒 ProtectedRoute check:", { isLoading, isAuthenticated, user: !!user, pathname })
     
+    // TEMPORARY: Allow access to login page for testing
+    if (pathname === '/login' || pathname === '/register' || pathname === '/') {
+      return
+    }
+    
     // Redirect to login if not authenticated
     if (!isLoading && !isAuthenticated) {
       console.log("❌ Not authenticated, redirecting to login from:", pathname)

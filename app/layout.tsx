@@ -5,6 +5,7 @@ import "./globals.css"
 import { AuthProvider } from "@/lib/auth"
 // import { NextAuthProvider } from "@/lib/next-auth"
 import { ConditionalLayout } from "@/components/conditional-layout"
+import { Toaster } from "@/components/ui/toaster"
 
 const geist = Geist({
   subsets: ["latin"],
@@ -30,6 +31,7 @@ export default function RootLayout({
         {/* <NextAuthProvider> */}
           <AuthProvider>
             <ConditionalLayout>{children}</ConditionalLayout>
+            <Toaster />
           </AuthProvider>
         {/* </NextAuthProvider> */}
       </body>
