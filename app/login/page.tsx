@@ -245,32 +245,32 @@ export default function LoginPage() {
                     View Demo Credentials
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="max-w-6xl max-h-[85vh] overflow-y-auto">
-                  <DialogHeader className="text-center pb-4">
-                    <DialogTitle className="font-serif text-3xl text-gray-900">Demo Login Credentials</DialogTitle>
-                    <DialogDescription className="text-lg text-gray-600">
+                <DialogContent className="max-w-7xl max-h-[90vh] overflow-y-auto">
+                  <DialogHeader className="text-center pb-6">
+                    <DialogTitle className="font-serif text-2xl text-gray-900">Demo Login Credentials</DialogTitle>
+                    <DialogDescription className="text-base text-gray-600">
                       Click any credential card below to instantly login and explore different user roles
                     </DialogDescription>
                   </DialogHeader>
                   
-                  <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 mt-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
                     {userRoles.map((role) => {
                       const Icon = role.icon
                       return (
-                        <div key={role.id} className="border border-gray-200 rounded-xl bg-white shadow-sm hover:shadow-md transition-all">
-                          <div className="p-4 border-b border-gray-100">
-                            <div className="flex items-center gap-3 mb-2">
-                              <div className="w-10 h-10 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center">
-                                <Icon className="w-5 h-5 text-gray-700" />
+                        <div key={role.id} className="border border-gray-200 rounded-xl bg-white shadow-sm hover:shadow-lg transition-all duration-200 overflow-hidden">
+                          <div className="p-5 border-b border-gray-100 bg-gray-50">
+                            <div className="flex items-start gap-4">
+                              <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl flex items-center justify-center shrink-0">
+                                <Icon className="w-6 h-6 text-blue-700" />
                               </div>
-                              <div>
-                                <h4 className="font-semibold text-base text-gray-900">{role.title}</h4>
-                                <p className="text-xs text-gray-500">{role.description}</p>
+                              <div className="flex-1 min-w-0">
+                                <h4 className="font-semibold text-lg text-gray-900 mb-1">{role.title}</h4>
+                                <p className="text-sm text-gray-600 leading-relaxed">{role.description}</p>
                               </div>
                             </div>
                           </div>
                           
-                          <div className="p-4 space-y-3">
+                          <div className="p-5 space-y-4">
                             {role.subtypes.length > 0 ? (
                               role.subtypes.map((subtype) => {
                                 const creds = (demoCredentials[role.id as keyof typeof demoCredentials] as any)?.[subtype.id]
@@ -278,15 +278,24 @@ export default function LoginPage() {
                                   <button
                                     key={subtype.id}
                                     onClick={() => selectDemoAccount(role.id, subtype.id)}
-                                    className="w-full text-left p-3 bg-gradient-to-r from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200 rounded-lg border border-blue-200 hover:border-blue-300 transition-all group"
+                                    className="w-full text-left p-4 bg-gradient-to-r from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200 rounded-lg border border-blue-200 hover:border-blue-300 transition-all group hover:scale-[1.02]"
                                   >
-                                    <div className="flex items-center justify-between mb-2">
-                                      <span className="font-medium text-sm text-blue-900">{subtype.title}</span>
-                                      <span className="text-xs text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity">Click to login →</span>
+                                    <div className="flex items-center justify-between mb-3">
+                                      <span className="font-semibold text-base text-blue-900">{subtype.title}</span>
+                                      <span className="text-sm text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity font-medium">Click to login →</span>
                                     </div>
-                                    <div className="text-xs text-blue-700 font-mono space-y-1">
-                                      <div className="truncate">📧 {creds?.username}</div>
-                                      <div className="truncate">🔐 {creds?.password}</div>
+                                    <div className="space-y-2">
+                                      <p className="text-xs text-blue-700 mb-2">{subtype.description}</p>
+                                      <div className="text-sm text-blue-800 font-mono space-y-1">
+                                        <div className="flex items-center gap-2">
+                                          <span className="text-blue-600">📧</span>
+                                          <span className="truncate">{creds?.username}</span>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                          <span className="text-blue-600">🔐</span>
+                                          <span className="truncate">{creds?.password}</span>
+                                        </div>
+                                      </div>
                                     </div>
                                   </button>
                                 )
@@ -294,15 +303,23 @@ export default function LoginPage() {
                             ) : (
                               <button
                                 onClick={() => selectDemoAccount(role.id)}
-                                className="w-full text-left p-3 bg-gradient-to-r from-green-50 to-green-100 hover:from-green-100 hover:to-green-200 rounded-lg border border-green-200 hover:border-green-300 transition-all group"
+                                className="w-full text-left p-4 bg-gradient-to-r from-green-50 to-green-100 hover:from-green-100 hover:to-green-200 rounded-lg border border-green-200 hover:border-green-300 transition-all group hover:scale-[1.02]"
                               >
-                                <div className="flex items-center justify-between mb-2">
-                                  <span className="font-medium text-sm text-green-900">Direct Access</span>
-                                  <span className="text-xs text-green-600 opacity-0 group-hover:opacity-100 transition-opacity">Click to login →</span>
+                                <div className="flex items-center justify-between mb-3">
+                                  <span className="font-semibold text-base text-green-900">Direct Access</span>
+                                  <span className="text-sm text-green-600 opacity-0 group-hover:opacity-100 transition-opacity font-medium">Click to login →</span>
                                 </div>
-                                <div className="text-xs text-green-700 font-mono space-y-1">
-                                  <div className="truncate">📧 {(demoCredentials[role.id as keyof typeof demoCredentials] as any)?.username}</div>
-                                  <div className="truncate">🔐 {(demoCredentials[role.id as keyof typeof demoCredentials] as any)?.password}</div>
+                                <div className="space-y-2">
+                                  <div className="text-sm text-green-800 font-mono space-y-1">
+                                    <div className="flex items-center gap-2">
+                                      <span className="text-green-600">📧</span>
+                                      <span className="truncate">{(demoCredentials[role.id as keyof typeof demoCredentials] as any)?.username}</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                      <span className="text-green-600">🔐</span>
+                                      <span className="truncate">{(demoCredentials[role.id as keyof typeof demoCredentials] as any)?.password}</span>
+                                    </div>
+                                  </div>
                                 </div>
                               </button>
                             )}
@@ -312,14 +329,14 @@ export default function LoginPage() {
                     })}
                   </div>
                   
-                  <div className="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-lg">
-                    <div className="flex items-start gap-3">
-                      <div className="w-6 h-6 bg-amber-200 rounded-full flex items-center justify-center flex-shrink-0">
-                        <Info className="w-4 h-4 text-amber-700" />
+                  <div className="mt-8 p-6 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-xl">
+                    <div className="flex items-start gap-4">
+                      <div className="w-8 h-8 bg-amber-200 rounded-full flex items-center justify-center flex-shrink-0">
+                        <Info className="w-5 h-5 text-amber-700" />
                       </div>
-                      <div>
-                        <h5 className="font-medium text-amber-900 mb-1">Demo Environment</h5>
-                        <p className="text-sm text-amber-700">
+                      <div className="flex-1">
+                        <h5 className="font-semibold text-amber-900 mb-2 text-lg">Demo Environment</h5>
+                        <p className="text-base text-amber-800 leading-relaxed">
                           These are demo accounts with pre-populated data. Each role has different permissions and access levels. 
                           Click any credential card above to automatically fill the login form and experience the platform.
                         </p>

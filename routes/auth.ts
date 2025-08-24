@@ -1,5 +1,6 @@
 import { Database } from "../utils/database.ts"
 import { AuthUtils } from "../utils/auth.ts"
+import { initializeDemoData } from "../utils/seed-data.ts"
 import type { User } from "../types/index.ts"
 
 const DEMO_USERS = [
@@ -88,12 +89,29 @@ async function initializeDemoUsers() {
   }
 }
 
+// CORS configuration
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+  "Access-Control-Allow-Credentials": "true",
+}
+
 export async function authRoutes(req: Request): Promise<Response> {
   const url = new URL(req.url)
   const path = url.pathname.replace("/api/auth", "")
 
-  // Initialize demo users on first request
+  // Handle CORS preflight
+  if (req.method === "OPTIONS") {
+    return new Response(null, {
+      status: 200,
+      headers: corsHeaders,
+    })
+  }
+
+  // Initialize demo users and data on first request
   await initializeDemoUsers()
+  await initializeDemoData()
 
   try {
     switch (path) {
@@ -126,7 +144,7 @@ async function handleLogin(req: Request): Promise<Response> {
   if (req.method !== "POST") {
     return new Response(JSON.stringify({ error: "Method not allowed" }), {
       status: 405,
-      headers: { "content-type": "application/json" },
+      headers: { "content-type": "application/json", ...corsHeaders },
     })
   }
 
@@ -136,7 +154,7 @@ async function handleLogin(req: Request): Promise<Response> {
   if (!email || !password) {
     return new Response(JSON.stringify({ error: "Email and password are required" }), {
       status: 400,
-      headers: { "content-type": "application/json" },
+      headers: { "content-type": "application/json", ...corsHeaders },
     })
   }
 
@@ -146,7 +164,7 @@ async function handleLogin(req: Request): Promise<Response> {
   if (!user || !user.isActive) {
     return new Response(JSON.stringify({ error: "Invalid credentials" }), {
       status: 401,
-      headers: { "content-type": "application/json" },
+      headers: { "content-type": "application/json", ...corsHeaders },
     })
   }
 
@@ -156,7 +174,7 @@ async function handleLogin(req: Request): Promise<Response> {
   if (!isValidPassword) {
     return new Response(JSON.stringify({ error: "Invalid credentials" }), {
       status: 401,
-      headers: { "content-type": "application/json" },
+      headers: { "content-type": "application/json", ...corsHeaders },
     })
   }
 
@@ -189,7 +207,7 @@ async function handleLogin(req: Request): Promise<Response> {
     }),
     {
       status: 200,
-      headers: { "content-type": "application/json" },
+      headers: { "content-type": "application/json", ...corsHeaders },
     },
   )
 }
