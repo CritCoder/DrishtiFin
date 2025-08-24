@@ -64,7 +64,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       try {
         const token = localStorage.getItem("drishti_token")
         if (token) {
-          const response = await fetch("https://dhr.deno.dev/api/auth/me", {
+          const response = await fetch("https://drishti-api.deno.dev/api/auth/me", {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -103,7 +103,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoading(true)
 
     try {
-      const response = await fetch("https://dhr.deno.dev/api/auth/login", {
+      const response = await fetch("https://drishti-api.deno.dev/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
