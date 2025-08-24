@@ -171,13 +171,13 @@ export default function LoginPage() {
         title: `Welcome back!`,
         message: `Successfully logged in as ${roleName}. You now have access to your personalized dashboard and features.`,
         actionLabel: 'Continue to Dashboard',
-        onAction: () => window.location.href = "/",
+        onAction: () => window.location.href = "/app",
         showEmailIndicator: false
       })
       
       // Delay redirect to show the notification
       setTimeout(() => {
-        window.location.href = "/"
+        window.location.href = "/app"
       }, 2500)
     } else {
       showNotification({

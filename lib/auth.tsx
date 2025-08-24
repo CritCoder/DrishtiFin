@@ -64,7 +64,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       try {
         const token = localStorage.getItem("drishti_token")
         if (token) {
-          const response = await fetch("https://drishti-api.deno.dev/api/auth/me", {
+          const response = await fetch("http://localhost:8001/api/auth/me", {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -103,7 +103,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoading(true)
 
     try {
-      const response = await fetch("https://drishti-api.deno.dev/api/auth/login", {
+      console.log("🔄 Making login request with:", { email: credentials.username, password: credentials.password })
+      
+      const response = await fetch("http://localhost:8001/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -114,8 +116,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }),
       })
 
+      console.log("📡 Response status:", response.status, "ok:", response.ok)
+      
       if (response.ok) {
         const data = await response.json()
+        console.log("📦 Response data:", data)
 
         if (data.success && data.token && data.user) {
           const userData = {
@@ -125,15 +130,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             loginTime: new Date().toISOString(),
           }
 
+          console.log("✅ Login successful, setting user:", userData)
           setUser(userData)
           localStorage.setItem("drishti_token", data.token)
           return true
+        } else {
+          console.log("❌ Login failed - missing success/token/user in response")
         }
+      } else {
+        const errorData = await response.text()
+        console.log("❌ Response not ok:", response.status, errorData)
       }
 
       return false
     } catch (error) {
-      console.error("Login error:", error)
+      console.error("🚨 Login error:", error)
       return false
     } finally {
       setIsLoading(false)
