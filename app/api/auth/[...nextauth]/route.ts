@@ -20,13 +20,17 @@ const handler = NextAuth({
       // For now, we'll allow all sign-ins
       return true
     },
-    async redirect({ url, baseUrl }) {
+    async redirect({ url, baseUrl, token }) {
+      console.log('NextAuth redirect callback:', { url, baseUrl, token })
+      
       // Allows relative callback URLs
       if (url.startsWith("/")) return `${baseUrl}${url}`
       // Allows callback URLs on the same origin
       else if (new URL(url).origin === baseUrl) return url
-      // Default redirect to /app after successful sign in
-      return `${baseUrl}/app`
+      
+      // For OAuth sign-ins, redirect to profile completion
+      // New users need to complete their profile first
+      return `${baseUrl}/complete-profile`
     },
     async session({ session, token }) {
       console.log('NextAuth session callback:', { session, token })
@@ -47,10 +51,6 @@ const handler = NextAuth({
       }
       return token
     },
-  },
-  pages: {
-    signIn: '/login',
-    error: '/login',
   },
   session: {
     strategy: 'jwt',

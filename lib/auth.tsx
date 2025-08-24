@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, createContext, useContext, type ReactNode } from "react"
+import { useSession, signOut } from "next-auth/react"
 
 export interface User {
   id: string
@@ -57,12 +58,34 @@ const ROLE_PERMISSIONS = {
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const { data: session, status } = useSession()
 
   useEffect(() => {
     // Check for existing authentication on mount
     const checkAuth = async () => {
       try {
         console.log("🔍 checkAuth starting...")
+        
+        // First check NextAuth session
+        if (session?.user) {
+          console.log("👤 NextAuth session found:", session.user)
+          const userData = {
+            id: session.user.email || '',
+            username: session.user.email || '',
+            email: session.user.email || '',
+            firstName: session.user.name?.split(' ')[0] || '',
+            lastName: session.user.name?.split(' ').slice(1).join(' ') || '',
+            role: "student" as const, // NextAuth users get student role by default
+            permissions: ROLE_PERMISSIONS["student"] || [],
+            loginTime: new Date().toISOString(),
+          }
+          console.log("✅ Setting user from NextAuth session:", userData)
+          setUser(userData)
+          setIsLoading(false)
+          return
+        }
+        
+        // Fallback to traditional token-based auth
         const token = localStorage.getItem("drishti_token")
         console.log("🎫 Token from localStorage:", token ? token.substring(0, 20) + "..." : "none")
         
@@ -103,8 +126,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     }
 
-    checkAuth()
-  }, [])
+    // Only run checkAuth when NextAuth session status is determined
+    if (status !== "loading") {
+      checkAuth()
+    }
+  }, [session, status])
 
   const login = async (credentials: {
     username: string
@@ -169,7 +195,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null)
     localStorage.removeItem("drishti_token")
     sessionStorage.clear()
-    window.location.href = "/login"
+    
+    // If user has NextAuth session, sign them out of NextAuth too
+    if (session) {
+      signOut({ callbackUrl: '/login' })
+    } else {
+      window.location.href = "/login"
+    }
   }
 
   const hasPermission = (permission: string): boolean => {
