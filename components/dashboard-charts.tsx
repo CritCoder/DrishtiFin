@@ -1,21 +1,6 @@
 "use client"
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-// import {
-//   BarChart,
-//   Bar,
-//   XAxis,
-//   YAxis,
-//   CartesianGrid,
-//   ResponsiveContainer,
-//   LineChart,
-//   Line,
-//   PieChart,
-//   Pie,
-//   Cell,
-//   Tooltip,
-//   Legend,
-// } from "recharts"
 
 const monthlyData = [
   { month: "Jan", placements: 240, batches: 40, revenue: 24 },
@@ -58,8 +43,19 @@ export function DashboardCharts() {
           <CardDescription className="font-open-sans">Placement statistics over the last 6 months</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="h-[350px] flex items-center justify-center text-muted-foreground">
-            Charts temporarily disabled for deployment
+          {/* Simple Bar Chart */}
+          <div className="h-[300px] p-4">
+            <div className="h-full flex items-end space-x-3">
+              {monthlyData.map((data, index) => (
+                <div key={data.month} className="flex-1 flex flex-col items-center space-y-2">
+                  <div className="w-full bg-primary rounded-t transition-all duration-500" 
+                       style={{ height: `${(data.placements / 400) * 80}%`, minHeight: '20px' }}>
+                  </div>
+                  <div className="text-xs font-medium">{data.month}</div>
+                  <div className="text-xs text-muted-foreground">{data.placements}</div>
+                </div>
+              ))}
+            </div>
           </div>
         </CardContent>
       </Card>
@@ -71,8 +67,19 @@ export function DashboardCharts() {
           <CardDescription className="font-open-sans">Distribution of training partner ratings</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="h-[350px] flex items-center justify-center text-muted-foreground">
-            Charts temporarily disabled for deployment
+          {/* Simple Bar Chart */}
+          <div className="h-[300px] p-4">
+            <div className="h-full flex items-end space-x-3">
+              {monthlyData.map((data, index) => (
+                <div key={data.month} className="flex-1 flex flex-col items-center space-y-2">
+                  <div className="w-full bg-primary rounded-t transition-all duration-500" 
+                       style={{ height: `${(data.placements / 400) * 80}%`, minHeight: '20px' }}>
+                  </div>
+                  <div className="text-xs font-medium">{data.month}</div>
+                  <div className="text-xs text-muted-foreground">{data.placements}</div>
+                </div>
+              ))}
+            </div>
           </div>
         </CardContent>
       </Card>
@@ -86,8 +93,19 @@ export function DashboardCharts() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="h-[350px] flex items-center justify-center text-muted-foreground">
-            Charts temporarily disabled for deployment
+          {/* Simple Bar Chart */}
+          <div className="h-[300px] p-4">
+            <div className="h-full flex items-end space-x-3">
+              {monthlyData.map((data, index) => (
+                <div key={data.month} className="flex-1 flex flex-col items-center space-y-2">
+                  <div className="w-full bg-primary rounded-t transition-all duration-500" 
+                       style={{ height: `${(data.placements / 400) * 80}%`, minHeight: '20px' }}>
+                  </div>
+                  <div className="text-xs font-medium">{data.month}</div>
+                  <div className="text-xs text-muted-foreground">{data.placements}</div>
+                </div>
+              ))}
+            </div>
           </div>
         </CardContent>
       </Card>

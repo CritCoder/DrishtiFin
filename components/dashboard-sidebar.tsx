@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import {
   BarChart3,
   Users,
@@ -148,30 +148,35 @@ interface DashboardSidebarProps {
 
 export function DashboardSidebar({ activeItem }: DashboardSidebarProps) {
   const [isCollapsed, setIsCollapsed] = useState(false)
+  const [currentRole, setCurrentRole] = useState<string>('osda_admin')
   const { user, logout } = useAuth()
 
   // TEMPORARY: For testing without proper auth, simulate different user roles based on URL or query params
   // In production, this should use the actual authenticated user role
-  const getCurrentUserRole = () => {
-    if (user?.role) return user.role
-    
-    // For testing: simulate different roles based on current path
-    if (typeof window !== 'undefined') {
-      const urlParams = new URLSearchParams(window.location.search)
-      const roleParam = urlParams.get('role')
-      if (roleParam) return roleParam
+  useEffect(() => {
+    const determineRole = () => {
+      if (user?.role) return user.role
       
-      // Default role based on path
-      const pathname = window.location.pathname
-      if (pathname.startsWith('/student')) return 'student'
-      if (pathname.startsWith('/tp') || pathname.startsWith('/batches') || pathname.startsWith('/placements')) return 'training_partner'
-      return 'osda_admin' // Default to admin for other routes
+      // For testing: simulate different roles based on current path
+      if (typeof window !== 'undefined') {
+        const urlParams = new URLSearchParams(window.location.search)
+        const roleParam = urlParams.get('role')
+        if (roleParam) return roleParam
+        
+        // Default role based on path
+        const pathname = window.location.pathname
+        if (pathname.startsWith('/student')) return 'student'
+        if (pathname.startsWith('/tps') || pathname.startsWith('/batches') || pathname.startsWith('/placements')) return 'training_partner'
+        return 'osda_admin' // Default to admin for other routes
+      }
+      
+      return 'osda_admin' // Default fallback
     }
     
-    return 'osda_admin' // Default fallback
-  }
+    setCurrentRole(determineRole())
+  }, [user?.role, typeof window !== 'undefined' ? window.location.pathname : '', typeof window !== 'undefined' ? window.location.search : ''])
   
-  const currentUser = user || { role: getCurrentUserRole() }
+  const currentUser = user || { role: currentRole }
   const visibleNavigationItems = navigationItems.filter((item) => currentUser && item.roles.includes(currentUser.role))
 
   const visibleShortcuts = shortcuts.filter((item) => currentUser && item.roles.includes(currentUser.role))
