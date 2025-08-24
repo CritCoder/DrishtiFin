@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useRouter } from "next/navigation"
+import { useNotifications } from "@/hooks/use-notifications"
 import Link from "next/link"
 
 interface BatchFormData {
@@ -25,6 +26,7 @@ interface BatchFormData {
 
 export default function NewBatchPage() {
   const router = useRouter()
+  const { showNotification } = useNotifications()
   const [formData, setFormData] = useState<BatchFormData>({
     batchName: "",
     trainingPartner: "",
@@ -53,7 +55,11 @@ export default function NewBatchPage() {
     try {
       // Validate required fields
       if (!formData.batchName || !formData.trainingPartner || !formData.program) {
-        alert("Please fill in all required fields")
+        showNotification({
+          status: 'error',
+          title: 'Validation Error',
+          message: 'Please fill in all required fields'
+        })
         setIsSubmitting(false)
         return
       }
@@ -68,14 +74,23 @@ export default function NewBatchPage() {
       })
 
       if (response.ok) {
-        alert("Batch created successfully!")
+        showNotification({
+          status: 'success',
+          title: 'Success!',
+          message: 'Batch created successfully',
+          showEmailIndicator: true
+        })
         router.push("/batches")
       } else {
         throw new Error("Failed to create batch")
       }
     } catch (error) {
       console.error("Error creating batch:", error)
-      alert("Failed to create batch. Please try again.")
+      showNotification({
+        status: 'error',
+        title: 'Error',
+        message: 'Failed to create batch. Please try again.'
+      })
     } finally {
       setIsSubmitting(false)
     }

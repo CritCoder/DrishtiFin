@@ -29,53 +29,20 @@ export function ProtectedRoute({
   useEffect(() => {
     console.log("🔒 ProtectedRoute check:", { isLoading, isAuthenticated, user: !!user, pathname })
     
-    // TEMPORARY: Bypass authentication for all dashboard routes
-    const isDashboardRoute = 
-      pathname.startsWith("/app") || 
-      pathname.startsWith("/placements") ||
-      pathname.startsWith("/tps") ||
-      pathname.startsWith("/batches") ||
-      pathname.startsWith("/payments") ||
-      pathname.startsWith("/approvals") ||
-      pathname.startsWith("/reports") ||
-      pathname.startsWith("/audit-logs") ||
-      pathname.startsWith("/settings") ||
-      pathname.startsWith("/files") ||
-      pathname.startsWith("/integrations") ||
-      pathname.startsWith("/student")
-      
-    if (isDashboardRoute) {
-      console.log("🚧 BYPASSING AUTH for dashboard route:", pathname);
-      return;
-    }
-    
     // Redirect to login if not authenticated
     if (!isLoading && !isAuthenticated) {
       console.log("❌ Not authenticated, redirecting to login from:", pathname)
       window.location.href = "/login"
+      return
+    }
+    
+    // Check if user has permission to access this route
+    if (!isLoading && user && !canAccessRoute(user.role, pathname)) {
+      console.log("❌ User role", user.role, "cannot access:", pathname)
+      window.location.href = "/login"
     }
   }, [isLoading, isAuthenticated, user, pathname])
 
-  // TEMPORARY: Completely bypass auth for all dashboard routes
-  const isDashboardRoute = 
-    pathname.startsWith("/app") || 
-    pathname.startsWith("/placements") ||
-    pathname.startsWith("/tps") ||
-    pathname.startsWith("/batches") ||
-    pathname.startsWith("/payments") ||
-    pathname.startsWith("/approvals") ||
-    pathname.startsWith("/reports") ||
-    pathname.startsWith("/audit-logs") ||
-    pathname.startsWith("/settings") ||
-    pathname.startsWith("/files") ||
-    pathname.startsWith("/integrations") ||
-    pathname.startsWith("/student")
-    
-  if (isDashboardRoute) {
-    console.log("🔒 Checking auth for dashboard route:", pathname, { isLoading, isAuthenticated, user: !!user });
-    console.log("🚧 BYPASSING all auth for dashboard routes - showing content directly");
-    return <>{children}</>;
-  }
 
   // Show loading state
   if (isLoading) {
