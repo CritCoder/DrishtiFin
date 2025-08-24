@@ -62,31 +62,43 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Check for existing authentication on mount
     const checkAuth = async () => {
       try {
+        console.log("🔍 checkAuth starting...")
         const token = localStorage.getItem("drishti_token")
+        console.log("🎫 Token from localStorage:", token ? token.substring(0, 20) + "..." : "none")
+        
         if (token) {
+          console.log("📡 Making /me request...")
           const response = await fetch("http://localhost:8001/api/auth/me", {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           })
 
+          console.log("📡 /me response:", response.status, response.ok)
+          
           if (response.ok) {
             const data = await response.json()
+            console.log("📦 /me data:", data)
             const userData = {
               ...data.user,
               username: data.user.email,
               permissions: ROLE_PERMISSIONS[data.user.role as keyof typeof ROLE_PERMISSIONS] || [],
               loginTime: new Date().toISOString(),
             }
+            console.log("✅ Setting user from checkAuth:", userData)
             setUser(userData)
           } else {
+            console.log("❌ /me failed, removing token")
             localStorage.removeItem("drishti_token")
           }
+        } else {
+          console.log("❌ No token found")
         }
       } catch (error) {
-        console.error("Error checking authentication:", error)
+        console.error("🚨 Error checking authentication:", error)
         localStorage.removeItem("drishti_token")
       } finally {
+        console.log("🏁 checkAuth finished, setting isLoading to false")
         setIsLoading(false)
       }
     }
@@ -133,6 +145,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           console.log("✅ Login successful, setting user:", userData)
           setUser(userData)
           localStorage.setItem("drishti_token", data.token)
+          console.log("💾 Token saved to localStorage:", data.token.substring(0, 20) + "...")
+          console.log("👤 User state set, isAuthenticated should now be:", !!userData)
           return true
         } else {
           console.log("❌ Login failed - missing success/token/user in response")

@@ -3,7 +3,7 @@ import type { Metadata } from "next"
 import { Geist } from "next/font/google"
 import "./globals.css"
 import { AuthProvider } from "@/lib/auth"
-import { NextAuthProvider } from "@/lib/next-auth"
+// import { NextAuthProvider } from "@/lib/next-auth"
 import { ConditionalLayout } from "@/components/conditional-layout"
 
 const geist = Geist({
@@ -27,11 +27,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geist.variable} antialiased`}>
       <body className="font-sans">
-        <NextAuthProvider>
+        {/* <NextAuthProvider> */}
           <AuthProvider>
             <ConditionalLayout>{children}</ConditionalLayout>
           </AuthProvider>
-        </NextAuthProvider>
+        {/* </NextAuthProvider> */}
       </body>
     </html>
   )

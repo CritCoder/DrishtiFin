@@ -27,11 +27,37 @@ export function ProtectedRoute({
   const pathname = usePathname()
 
   useEffect(() => {
+    console.log("🔒 ProtectedRoute check:", { isLoading, isAuthenticated, user: !!user, pathname })
+    
+    // TEMPORARY: Bypass authentication for testing
+    if (pathname === '/app') {
+      console.log("🚧 BYPASSING AUTH for /app route");
+      return;
+    }
+    
     // Redirect to login if not authenticated
     if (!isLoading && !isAuthenticated) {
+      console.log("❌ Not authenticated, redirecting to login from:", pathname)
       window.location.href = "/login"
     }
-  }, [isLoading, isAuthenticated])
+  }, [isLoading, isAuthenticated, user, pathname])
+
+  // TEMPORARY: Skip auth redirect but still check for user
+  if (pathname === '/app') {
+    console.log("🔒 Checking auth for /app:", { isLoading, isAuthenticated, user: !!user });
+    // If we have a user, show the dashboard
+    if (user) {
+      console.log("✅ User found, showing dashboard");
+      return <>{children}</>;
+    }
+    // If no user but not loading, still show dashboard for now (bypass auth)
+    if (!isLoading) {
+      console.log("⚠️ No user but not loading, showing dashboard anyway");
+      return <>{children}</>;
+    }
+    // If still loading, show loading spinner
+    console.log("⏳ Still loading, showing spinner");
+  }
 
   // Show loading state
   if (isLoading) {
