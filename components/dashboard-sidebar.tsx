@@ -150,12 +150,25 @@ export function DashboardSidebar({ activeItem }: DashboardSidebarProps) {
   const [isCollapsed, setIsCollapsed] = useState(false)
   const { user, logout } = useAuth()
 
-  // TEMPORARY: For testing without proper auth, simulate different user roles based on URL or default
+  // TEMPORARY: For testing without proper auth, simulate different user roles based on URL or query params
   // In production, this should use the actual authenticated user role
   const getCurrentUserRole = () => {
     if (user?.role) return user.role
-    // For testing: simulate different roles based on current path or use student as default
-    return "student" // Default to student role for testing
+    
+    // For testing: simulate different roles based on current path
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search)
+      const roleParam = urlParams.get('role')
+      if (roleParam) return roleParam
+      
+      // Default role based on path
+      const pathname = window.location.pathname
+      if (pathname.startsWith('/student')) return 'student'
+      if (pathname.startsWith('/tp') || pathname.startsWith('/batches') || pathname.startsWith('/placements')) return 'training_partner'
+      return 'osda_admin' // Default to admin for other routes
+    }
+    
+    return 'osda_admin' // Default fallback
   }
   
   const currentUser = user || { role: getCurrentUserRole() }
@@ -171,7 +184,7 @@ export function DashboardSidebar({ activeItem }: DashboardSidebarProps) {
       )}
     >
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-sidebar-border">
+      <div className="flex items-center justify-between px-4 h-16 border-b border-sidebar-border">
         {!isCollapsed && (
           <div className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-sidebar-accent rounded-lg flex items-center justify-center">

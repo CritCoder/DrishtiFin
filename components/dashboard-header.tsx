@@ -42,8 +42,8 @@ export function DashboardHeader({ title, subtitle }: DashboardHeaderProps) {
   const breadcrumbs = generateBreadcrumbs()
 
   return (
-    <header className="bg-white border-b border-gray-200 h-16">
-      <div className="px-6 h-full flex items-center justify-between">
+    <header className="bg-white border-b border-gray-200 h-16 flex-shrink-0">
+      <div className="px-6 h-16 flex items-center justify-between">
           {/* Left - Breadcrumbs */}
           <nav className="flex items-center space-x-2 text-sm">
             {breadcrumbs.map((crumb, index) => (
