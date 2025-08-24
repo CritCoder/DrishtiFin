@@ -15,11 +15,21 @@ const handler = NextAuth({
   ],
   callbacks: {
     async signIn({ user, account, profile }) {
+      console.log('NextAuth signIn callback:', { user, account, profile })
       // You can add custom logic here to validate users
       // For now, we'll allow all sign-ins
       return true
     },
+    async redirect({ url, baseUrl }) {
+      // Allows relative callback URLs
+      if (url.startsWith("/")) return `${baseUrl}${url}`
+      // Allows callback URLs on the same origin
+      else if (new URL(url).origin === baseUrl) return url
+      // Default redirect to /app after successful sign in
+      return `${baseUrl}/app`
+    },
     async session({ session, token }) {
+      console.log('NextAuth session callback:', { session, token })
       // Customize the session object
       if (session.user) {
         // Add custom properties to the session
@@ -29,6 +39,7 @@ const handler = NextAuth({
       return session
     },
     async jwt({ token, user, account }) {
+      console.log('NextAuth JWT callback:', { token, user, account })
       // Persist user info to the token
       if (user) {
         token.role = 'student'
